@@ -1,213 +1,206 @@
-    /////// ////// SynthDefs ////// ///////
+// Biblioteca SynthDef
 
+///////////////////////// Drones ///////////////////////////////////////////
 
-/// SynthDef creados por Eli Fieldsteel.
-
-// Sintesis Granular
-
-
-// Audio estereo convertido en mono para la sintesis granular, es mejor leer un sólo canal
-
-b = Buffer.readChannel(s,"/Users/sdcarr/Desktop/samples /set1/etnico/perc1.wav", channels:[0]);
-c = Buffer.readChannel(s,"/Users/sdcarr/Desktop/samples /set1/etnico/melodia1.wav",channels:[0]);
-
-(
-SynthDef(\grainbuf, {
+SynthDef(\bplay, {
 	var sig, env;
-
-	env = Env([0,1,1,0], [\atk.ir(1),\sus.ir(4),\rel.ir(1)], [1,0,-1]).kr(2);
-
-	sig = GrainBuf.ar(
-		numChannels:2,
-		trigger:Dust.kr(40), // 40 granos por segundo
-		dur:0.1,
-		sndbuf:\buf.kr(0),
-		rate:BufRateScale.kr(\buf.kr(0)) * \rate.kr(1),
-		pos: Line.kr(0,1,BufDur.kr(\buf.kr(0))* \timescale.kr(5)),
-		interp:2,
-		pan:0,
-		envbufnum:-1
-	);
-	sig = sig * env * \amp.kr(0.5);
-
-	Out.ar(\out.kr(0), sig);
-
+	env =     env = Env.new([0,0.70,0.70,0], [\dur.ir(55)*0.333,\dur.ir*0.333,\dur.ir*0.333]).ar(2);
+	sig = PlayBuf.ar(2,\buf.ir(0),\rate.ir(1),1, \spos.ir(0));
+	sig = sig * env;
+	sig = Pan2.ar(sig, \pos.ir(0));
+	Out.ar(\out.kr(0),sig)
 }).add;
-)
-
-// calcular duracion de  "~buffers"
-d = c.numFrames / c.sampleRate;
 
 
 
+// FUENTE: https://recarteblog.wordpress.com/
+//droneFM01
 
-(
-SynthDef(\tgrains, {
-	var sig, env;
 
-	env = Env([0,1,1,0], [\atk.ir(1),\sus.ir(4),\rel.ir(1)], [1,0,-1]).kr(2);
+SynthDef(\droneFM, {
+	arg f1Freq=0.1, f2Freq=1.1, f3Freq=2.2, nFreq=440, m1Ratio=1, m2Ratio=2, m3Ratio=3,
+	amp=0.1, dur=55, ampM=0.84 , pan=0;
+	var sig, car1, mod1, car2, mod2, car3, mod3, env, index;
+	index = LFNoise1.kr(0.2).range(2, 12);
+	env = EnvGen.kr(Env.new([0, 0.70, 0.70, 0], [dur*0.333, dur*0.333, dur*0.333]), doneAction:2);
+	mod1 = SinOsc.ar([nFreq * m1Ratio, nFreq+0.7 * m1Ratio], mul:nFreq * m1Ratio * index) * ampM;
+	car1 = SinOsc.ar(f1Freq + mod1);
 
-	sig = TGrains.ar(
-		numChannels:2,
-		trigger:Dust.kr(40), // 40 granos por segundo
-		bufnum:\buf.kr(0),
-		dur:0.05,
-		rate: \rate.kr(1),
-		centerPos:\pos.kr(0.5),
-		pan:0,
-		amp:0.5,
-		interp:2
-	);
-	sig = sig * env * \amp.kr(0.9);
+	mod2 = SinOsc.ar([nFreq * m2Ratio, nFreq+1.4 * m2Ratio], mul:nFreq * m2Ratio * index) * ampM;
+	car2 = SinOsc.ar(f2Freq + mod2);
 
-	Out.ar(\out.kr(0), sig);
-
+	mod3 = SinOsc.ar([nFreq * m3Ratio, nFreq+0.35 * m3Ratio], mul:nFreq * m3Ratio * index) * ampM;
+	car3 = SinOsc.ar(f3Freq + mod3) * 0.4;
+	sig = car1 + car2 + car3 * env * amp;
+	sig = Pan2.ar(sig, pan);
+	Out.ar(0, sig);
 }).add;
-)
 
 
 
 
 
 
+SynthDef(\droneFMPulse, {
+    var sig, sig1, sig2, sig3, mod1, mod2, mod3, env, index;
+    index = LFNoise1.kr(0.5).range(2,12);
 
-///////////////////////////////////
+    env = Env.new([0,0.70,0.70,0], [\dur.ir(55)*0.333,\dur.ir*0.333,\dur.ir*0.333]).ar(2);
 
-d = Buffer.alloc(s, s.sampleRate * 3);// Crea un buffer vacio
 
-(
-SynthDef(\tgrains_live, {
-	var sig, env;
+    mod1 = SinOsc.ar([\nfreq.kr(440)*\m1Ratio.kr(1), \nfreq.kr +1.4* \m1Ratio.kr], 0.0,\amp.kr(440)* \m1Ratio.kr * index) * \ampM.kr(0.84);
+    sig1 = LFPulse.ar(\f1freq.kr(0.1) + mod1);
 
-	env = Env.asr(\atk.ir(0.1), \sus.ir(1), \rel.ir(1)).kr(2, \gate.kr(1));
+      mod2 = SinOsc.ar([\nfreq.kr(440)*\m2Ratio.kr(2), \nfreq.kr +0.7* \m2Ratio.kr], 0.0,\amp.kr* \m2Ratio.kr * index) * \ampM.kr(0.84);
+    sig2 = LFPulse.ar(\f2freq.kr(1.1) + mod2);
 
-	sig = TGrains.ar(
-		numChannels:2,
-		trigger:Dust.kr(40), // 40 granos por segundo
-		bufnum:\buf.kr(0),
-		dur:0.05,
-		rate: \rate.kr(1),
-		centerPos:\pos.kr(0.5),
-		pan:0,
-		amp:0.5,
-		interp:2
-	);
-	sig = sig * env * \amp.kr(0.9);
 
-	Out.ar(\out.kr(0), sig);
 
+         mod3 = SinOsc.ar([\nfreq.kr(440)*\m3Ratio.kr(3), \nfreq.kr +0.35* \m3Ratio.kr], 0.0,\amp.kr* \m3Ratio.kr * index) * \ampM.kr(0.84);
+    sig3 = LFPulse.ar(\f3freq.kr(2.2) + mod3);
+
+    sig = sig1 * sig2 *sig3 *env * 0.3;
+    sig = Pan2.ar(sig, \pan.kr(0));
+
+    Out.ar(\out.kr(0), sig1);
 }).add;
-)
 
 
 
-///////////////////////
+SynthDef(\dron, {
+    | freq = 440, amp = 0.5, dur = 60 |
+    var sig, mod, env;
+    mod = SinOsc.ar(5 , 0, 0.5,1);
+     sig = Resonz.ar( Saw.ar(freq, amp),1000,\rq.ir(1));
 
-
-(
-SynthDef(\tgrains_live, {
-	var sig, ptr, env,pos, mic, buf = \buf.kr(0);
-
-	env = Env.asr(\atk.ir(0.1), \sus.ir(1), \rel.ir(1)).kr(2,\gate.kr(1));
-	mic = SoundIn.ar(0);
-	ptr = Phasor.ar(0,1,0,BufFrames.kr(\buf.kr(0)));
-    BufWr.ar(mic, \buf.kr(0), ptr);
-
-	pos = (ptr/SampleRate.ir) - 0.25;
-	pos = pos + LFNoise1.kr(100).bipolar(0.2);
-	sig = TGrains.ar(
-		numChannels:2,
-		trigger:Dust.kr(40), // 40 granos por segundo
-		bufnum:buf,
-		dur:0.05,
-		rate: \rate.kr(1),
-		centerPos:(ptr/SampleRate.ir)-1,
-		pan:0,
-		amp:1,
-		interp:2
-	);
-	sig = sig * env * \amp.kr(0.9);
-
-	Out.ar(\out.kr(0), sig);
-
+    sig = sig + mod;
+     env = EnvGen.kr(Env.linen(2, dur, 2), doneAction: 2);
+    sig = sig * env;
+    //sig = FreeVerb.ar(sig, 0.5, 3, 1);
+    Out.ar(0, sig ! 2); // Salida estéreo
 }).add;
-)
-///////////   Synthdef complejos ///////
 
-(
-
-// Filter functions organized in a dictionary (Event)
-// The signal of our synth will be passed in as the first argument
-f = (
-    hpf: { |in, cutoff=1000, rq=1|
-        RHPF.ar(in, cutoff, rq)
-    },
-    bpf: { |in, cutoff=1000, rq=1|
-        BPF.ar(in, cutoff, rq)
-    },
-    lpf: { |in, cutoff=1000, rq=1|
-        RLPF.ar(in, cutoff, rq)
-    }
-);
-
-// Iterate over all the filters we defined above and use them in a SynthDef
-f.keysValuesDo{|filtername, filterfunction|
-    var synthdefname = "saw" ++ filtername.asString;
-
-    SynthDef.new(synthdefname, { |freq=220, out=0|
-        var sig = Saw.ar(freq, mul:0.1);
-
-        sig = SynthDef.wrap(
-            filterfunction,
-            prependArgs: [sig] // Pass signal in to the filter
-            // NOTE: prependArgs HAVE to be inside of []
-        );
-
-        Out.ar(out, sig)
-    }).add;
-};
-)
+// Para reproducir el dron
+//Synth(\dron, [\freq, 80,\rq, 2]);
 
 
-////////////////////////////////////////
-////////// Synthdef Buffplayer ///////////
-////cortesía Mads Kjeldgaard//////////7 //////////////////////////////////////
 
-(
 
-~bufplayerfunc = {|numchans=1|
-   {|rate=1, buffer, trigger=1, start=0, loop=0, amp=1, out=0|
+// Establece la frecuencia fundamental
+~freqFundamental = 80;
 
-      // Buffer player
-      var sig = PlayBuf.ar(
-         numchans, // Number of channels passed into the function from the outer function
-         buffer,
-         rate * BufRateScale.kr(buffer),
-         trigger,
-         start * BufDur.kr(buffer),
-         loop
-         );
+// Crea un dron con DFM1
+SynthDef(\dronDFM1, {
+    var sig, filtro, env;
+    // Genera una onda senoidal como fuente de sonido
+    sig = SinOsc.ar([~freqFundamental, ~freqFundamental * 1.01], 0, 0.1);
+    // Modula la resonancia del filtro para que entre y salga de la auto-oscilación
+    filtro = DFM1.ar(
+        sig,
+        ~freqFundamental * 2, // Frecuencia de corte del filtro
+        SinOsc.kr(0.05).range(0.9, 1.1), // Resonancia modulada
+        1, // Ganancia de entrada
+        0, // Tipo de filtro: 0 para paso bajo
+        0.0003, // Nivel de ruido
+        0.5 // Escala la salida
+    );
+    // Usa una envolvente para controlar la duración del dron
+    env = EnvGen.kr(Env.linen(10, 60, 10), doneAction: 2);
+    filtro = filtro * env;
+    // Salida estéreo
+    Out.ar(0, filtro ! 2);
+}).add;
 
-      // Output
-      Out.ar(out, sig * amp);
-   }
-};
 
-(1..64).do{|chanNum|
-   var name = "bufplayer" ++ chanNum;
-   SynthDef.new(name, ~bufplayerfunc.value(chanNum)).add;
-};
 
-)
+// pad
+
+SynthDef(\pad, {
+    var sig, env;
+
+    env = Env.asr(1.0,1,1.0).ar(Done.freeSelf, \gate.kr(1));
+
+    sig = Saw.ar(\freq.kr(440)* (LFNoise2.kr(3!8)*0.2).midiratio* [1,2,1,2,2,1,2,1]);
+    sig = BPF.ar(sig, {ExpRand(200,900)}!sig.size,0.2)*9.dbamp;
+    sig = Splay.ar(sig, 0.3);
+    sig = (sig * 10.dbamp).tanh;
+    sig = Pan2.ar(sig , \pan.kr(0));
+    sig = sig * env;
+    sig = sig * -18.dbamp;
+    Out.ar(\out.kr(0), sig)
+}).add;
+
+
+
+
+
+
+//////////////////////// FX /////////////////////////////////////
+
+
+SynthDef(\fx, {
+    var sig, fb;
+    sig = In.ar(\out.kr(0),2);
+    [0.2,0.3,0.35].do{ |windowSize|
+
+        sig = sig + PitchShift.ar(sig * ToggleFF.ar(Dust.ar(4))* -123.dbamp, windowSize, 2);
+    };
+
+    sig = sig + LocalIn.ar(2);
+    fb = sig;
+    fb = DelayC.ar(fb, 3.0, [2.0,3.0]);
+    fb = LPF.ar(fb, 3000);
+    fb = HPF.ar(fb, 100);
+    fb = fb* -2.dbamp;
+    fb = Limiter.ar(fb);
+    LocalOut.ar(fb);
+    sig = LeakDC.ar(sig);
+    sig = Limiter.ar(sig);
+    ReplaceOut.ar(\out.kr(0), sig)
+}).add;
 
 /*
-Con este synthdef, se puede llamarlo por su nombre base (“bufplayer” en este caso) más el número de canales. Por ejemplo: un reproductor de búfer de 33 canales se vería así
-Synth(\bufplayer33, [\buffer, b])
-Uno mono:
-Synth(\bufplayer1, [\buffer, b])
-Uno estereo:
-Synth(\bufplayer2, [\buffer,b])
+(
+
+
+var a, b, c, n;
+
+
+
+n = 40; // how many synths to create
+
+
+
+// 3 different processes
+
+a = { arg freq, amp, pan;
+
+	Pan2.ar(SinOsc.ar(freq), pan, amp)};
+
+b =  { arg amp, pan, freq;
+
+	Pan2.ar(RLPF.ar(Saw.ar(freq), freq * 6, 0.1), pan, amp)};
+
+c =  { arg pan, freq, amp;
+
+	Pan2.ar(Resonz.ar(GrayNoise.ar, freq * 2, 0.1), pan, amp * 2)};
+
+
+
+// a task to automatically create the synthdefs
+
 */
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-
+//Boilerplate code for basic live coding functionality
 
 (
 Buffer.freeAll;
@@ -15,16 +15,16 @@ s.options.numBuffers = 1024 * 16;
 s.options.memSize = 8192 * 128;
 //boot the server
 s.boot;
+
+
 // display nodeTree
 
 v = View(nil, Rect(0, 0, 300, 400)).front.alwaysOnTop_(true);
 s.plotTreeView(parent: v);
 
-//Dysplay scope
-s.scope;
-
 //display the oscilloscope
 s.scope;
+
 //start proxyspace
 p=ProxySpace.push(s);
 //start tempo clock
@@ -41,28 +41,13 @@ s.waitForBoot({
 Task({
 
 	d = Dictionary.new;
-		d.add(\foldernames -> PathName(thisProcess.nowExecutingPath.dirname +/+ "../samples/set1").entries);
+        d.add(\foldernames -> PathName(thisProcess.nowExecutingPath.dirname +/+ "../samples/set1").entries);
 	for (0, d[\foldernames].size-1,
 		{arg i; d.add(d[\foldernames][i].folderName -> d[\foldernames][i].entries.collect({
 			arg sf;
 			Buffer.read(s,sf.fullPath);
 		});
 	)});
-
-   e  = Dictionary.new;
-		e.add(\foldernames -> PathName(thisProcess.nowExecutingPath.dirname +/+ "../samples/set2").entries);
-	for (0, e[\foldernames].size-1,
-		{arg i; e.add(d[\foldernames][i].folderName -> d[\foldernames][i].entries.collect({
-			arg sf;
-			Buffer.read(s,sf.fullPath);
-		});
-	)});
-
-
-
-     ("/sample-audition.scd").loadRelative;
-	// Abrir ventana para seleccionar audios (jamshark courtesy)
-
 	("SynthDefs.scd").loadRelative;
 	//loads snippets from setup folder
 	("Snippets.scd").loadRelative;
