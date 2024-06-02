@@ -1,5 +1,8 @@
     /////// ////// SynthDefs ////// ///////
 
+
+/// SynthDef creados por Eli Fieldsteel.
+
 // Sintesis Granular
 
 
