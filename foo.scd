@@ -1,6 +1,54 @@
+
+if(currentEnvironment.isKindOf(ProxySpace).not) {
+	p = ProxySpace.new.push;
+};
+
+q = ();  // Event i.e. a dictionary
+
+q.buffers = List.new;
+
+Dialog.getPaths({ arg paths;
+    paths.do({ |soundPath|
+        soundPath.postln;
+        q.buffers.add(Buffer.read(s, soundPath));
+	});  // btw: please close brackets at the same level
+});
+
+
+q.buffers
+
+
+
+
+
+
 ("Setup/Setup.scd").loadRelative;
 
 
+
+
+
+Synth(\grainbuf,[\buf, q.buffers, \amp, 1])
+
+(
+~a = Pbind(
+	\instrument, \grainbuf,
+	\buf, q.buffers,
+	\dur,1
+
+)
+)
+
+~a.play
+
+
+
+
+
+
+
+
+SCLOrkSynths.gui
 
 Routine{
 	var frequencies;
@@ -19,13 +67,11 @@ Routine{
 
 
 
- (
 
-	b = Buffer.read(s,"/Users/sdcarr/Desktop/samples /set1/etnico/melodia2.wav" );
 	~p = Pbind(
 		\instrument,\tgrains,
 		\dur, 0.256,
-		\buf, b
+		\buf, Pseq(d[\foldernames].collect({ |folder| folder.collect(_.bufnum) }).flat, inf)
 	)
 )
 
@@ -39,6 +85,19 @@ d["piano"][1].play
 ~piano1 = Pbind(\instrument,\sinte,\buf,d["piano"][1],\dur,16,\amp,1);
 ~piano2 = Pbind(\instrument,\sinte,\buf,d["piano"][1],\dur,32,\amp,1,\rate,0.5);
 )
+
+
+// Cargar buffers de audio en una lista
+~buffers = [
+	Buffer.read(s, "d["etnico"]"),
+    Buffer.read(s, "path/to/your/sample2.wav"),
+    // Añadir más buffers según sea necesario
+];
+
+
+
+
+
 
 d.keys
 d["k"][0].play
