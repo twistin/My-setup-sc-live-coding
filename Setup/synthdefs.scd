@@ -1,5 +1,44 @@
 // Biblioteca SynthDef
 
+/////////////////// sintesis granular
+
+SynthDef(\grainbuf, {
+	var sig, env;
+
+	env = Env([0,1,1,0], [\atk.ir(1),\sus.ir(4),\rel.ir(1)], [1,0,-1]).kr(2);
+
+	sig = GrainBuf.ar(
+		numChannels:2,
+		trigger:Dust.kr(40), // 40 granos por segundo
+		dur:0.1,
+		sndbuf:\buf.kr(0),
+		rate:BufRateScale.kr(\buf.kr(0)) * \rate.kr(1),
+		pos: Line.kr(0,1,BufDur.kr(\buf.kr(0))* \timescale.kr(5)),
+		interp:2,
+		pan:0,
+		envbufnum:-1
+	);
+	sig = sig * env * \amp.kr(0.5);
+
+	Out.ar(\out.kr(0), sig);
+
+}).add;
+
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
 ///////////////////////// Drones ///////////////////////////////////////////
 
 SynthDef(\bplay, {
@@ -113,7 +152,7 @@ SynthDef(\dronDFM1, {
 
 
 
-// pad
+////////////////////// pad /////////////////////////////////////
 
 SynthDef(\pad, {
     var sig, env;
@@ -130,7 +169,16 @@ SynthDef(\pad, {
     Out.ar(\out.kr(0), sig)
 }).add;
 
-
+SynthDef(\pad_ho, {
+	var sig;
+	sig = Saw.ar(\freq.kr(440)*({LFNoise2.kr(8) } ! 16 * 0.1).midiratio);
+	sig = DelayC.ar(sig, 0.01, {Rand(0,0.01) } ! sig.size);
+	sig = Splay.ar(sig);
+	sig = sig * Env.asr(3,1,3).ar(Done.freeSelf, \gate.kr(1));
+	sig = sig *\amp.kr(-20.dbamp);
+	sig = sig!2;
+	Out.ar(\out.kr(0), sig);
+}).add;
 
 
 
@@ -159,37 +207,6 @@ SynthDef(\fx, {
     ReplaceOut.ar(\out.kr(0), sig)
 }).add;
 
-/*
-(
-
-
-var a, b, c, n;
-
-
-
-n = 40; // how many synths to create
-
-
-
-// 3 different processes
-
-a = { arg freq, amp, pan;
-
-	Pan2.ar(SinOsc.ar(freq), pan, amp)};
-
-b =  { arg amp, pan, freq;
-
-	Pan2.ar(RLPF.ar(Saw.ar(freq), freq * 6, 0.1), pan, amp)};
-
-c =  { arg pan, freq, amp;
-
-	Pan2.ar(Resonz.ar(GrayNoise.ar, freq * 2, 0.1), pan, amp * 2)};
-
-
-
-// a task to automatically create the synthdefs
-
-*/
 
 
 
@@ -200,6 +217,16 @@ c =  { arg pan, freq, amp;
 
 
 
+
+SynthDef(\setPerc2,
+    {arg out = 0, buf = 0, amp = 0.5, pan = 0, rel=15, dur = 8;
+        var sig,env ;
+        sig = Mix.ar(PlayBuf.ar(2,buf,\rate.ir(1),1,0,loop:0,doneAction:2));
+        env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
+        sig = sig * env;
+        sig = sig * amp;
+        Out.ar(out,Pan2.ar(sig,pan));
+}).add;
 
 
 
