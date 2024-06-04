@@ -14,7 +14,7 @@ Dialog.getPaths({ arg paths;
 	});  // btw: please close brackets at the same level
 });
 
-
+q.buffers[7].play
 q.buffers
 
 
@@ -27,17 +27,16 @@ q.buffers
 
 
 
+d["etnico"][0]
 
-Synth(\grainbuf,[\buf, q.buffers, \amp, 1])
+Synth(\grainbuf,[\sndbuf, q.buffers[8], \amp, 1])
 
 (
 ~a = Pbind(
 	\instrument, \grainbuf,
-	\buf, q.buffers,
-	\dur,1
+	\buf, q.buffers[1],
+	\dur,1)
 
-)
-)
 
 ~a.play
 

@@ -1,7 +1,5 @@
 # Synthdef
 
-
-
 ## Kicks
 
 - 808
@@ -9,8 +7,6 @@
 - kickBlocks
 
 - kick_oto309
-
-
 
 ## Snares
 
@@ -56,8 +52,6 @@
 
 - subBass2
 
-
-
 ## Keyboard
 
 - FMRhodes1
@@ -78,13 +72,9 @@
 
 - blip1
 
-
-
 ## Sintesis granular
 
 - grainbuf
-
-
 
 ## Drones
 
@@ -93,8 +83,6 @@
 - droneFMPulse
 
 - simpledrone
-
-
 
 ## Pad
 
@@ -110,8 +98,6 @@
 
 - superSaw
 
-
-
 ## Percusion
 
 - abstractDrum
@@ -126,15 +112,11 @@
 
 - crotales
 
-
-
 ## FX
 
 - fx
 
 - setPerc2
-
-
 
 ## Strings
 
@@ -156,8 +138,6 @@
 
 ## Simple SynthDef
 
-
-
 - simpleSin
 
 - simpleSaw
@@ -165,7 +145,3 @@
 - simpleLftri
 
 - simplePulse
-
-
-
-
