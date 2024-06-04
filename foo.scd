@@ -24,19 +24,46 @@ q.buffers
 
 ("Setup/Setup.scd").loadRelative;
 
-
+Pan2.ar(Synth(\grainBuf,[\freq,400]))
 
 
 d["etnico"][0]
 
-Synth(\grainbuf,[\sndbuf, q.buffers[8], \amp, 1])
+Synth(\BUFSynth),[\sndbuf, b.orquesta[4], \amp, 1])!2;
 
 (
+b = ();
+b.orquesta = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/orquesta/").entries.collect({|n|
+	Buffer.readChannel(s,n.fullPath, channels:[0]);
+});
+)
+{b.orquesta[3]!2}.play
+
+b.orquesta[2].play
+
+
+
+
+b = Buffer.readChannel(s, "/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/orquesta/debussy_98.mp3");
+
+
+(
+l = Prewrite(1, // start with 1
+        (    1: [0.25,2],
+            0.25: [3,3,2]/4,
+        3/4: [0.25,1,0.125,0.125],
+        ), 4);
+
 ~a = Pbind(
 	\instrument, \grainbuf,
-	\buf, q.buffers[1],
-	\dur,1)
+	\buf, b.orquesta[0],
+	\dur,l,
+	\amp, 1000000,
+	\rate, 0.5
 
+)
+)
+~a.pause
 
 ~a.play
 
@@ -66,13 +93,13 @@ Routine{
 
 
 
-
+(
 	~p = Pbind(
 		\instrument,\tgrains,
 		\dur, 0.256,
-		\buf, Pseq(d[\foldernames].collect({ |folder| folder.collect(_.bufnum) }).flat, inf)
+		\buf, b.orquesta[0], inf)
 	)
-)
+
 
 Synth(\tgrains,[\buf,b])
 b.play;
@@ -84,7 +111,14 @@ d["piano"][1].play
 ~piano1 = Pbind(\instrument,\sinte,\buf,d["piano"][1],\dur,16,\amp,1);
 ~piano2 = Pbind(\instrument,\sinte,\buf,d["piano"][1],\dur,32,\amp,1,\rate,0.5);
 )
-
+(
+c = ();
+c.orquesta = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/techno/").entries.collect({|n|
+	Buffer.readChannel(s,n.fullPath, channels:[0]);
+});
+)
+ c.techno[0].play
+c.techno[0].play
 
 // Cargar buffers de audio en una lista
 ~buffers = [

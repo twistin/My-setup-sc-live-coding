@@ -2,10 +2,10 @@
 
 
 
-                               //////// Biblioteca SynthDef ////////
+             //////// Biblioteca SynthDef ////////
 
-                               ////// Drums //////////
-////// KICKS
+                      ////// Drums //////////
+                      ////// KICKS /////
 
 // 808
 (
@@ -1482,7 +1482,7 @@ metadata: (
 
 
 
-/////////////////// sintesis granular
+/////////////////// sintesis granular ///////////////////
 
 SynthDef(\grainbuf, {
 	var sig, env;
@@ -1504,13 +1504,28 @@ SynthDef(\grainbuf, {
 	);
 	sig = sig * env ;
 
+
 	Out.ar(\out.kr(0), sig);
 
 }).add;
 
+/////////////////////////  BUFSynth //////////
+
+SynthDef(\BUFSynth, {
+	var sig, env;
+	env = Env.perc(\atk.ir(0.001),\rel.ir(0.1)).ar(2);
+	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1));
+	sig = Pan2.ar(sig, \pan.ir(0),\amp.ir(0.5));
+	sig = sig * env;
+
+	Out.ar(\out.ir(0), sig);
+}
+)
+;
 
 
-///////////////////////// Drones ///////////////////////////////////////////
+
+///////////////////////// Drones /////////// ///////////////////////////////////////////
 
 
 
