@@ -1,50 +1,25 @@
 
-if(currentEnvironment.isKindOf(ProxySpace).not) {
-	p = ProxySpace.new.push;
-};
-
-q = ();  // Event i.e. a dictionary
-
-q.buffers = List.new;
-
-Dialog.getPaths({ arg paths;
-    paths.do({ |soundPath|
-        soundPath.postln;
-        q.buffers.add(Buffer.read(s, soundPath));
-	});  // btw: please close brackets at the same level
-});
-
-q.buffers[7].play
-q.buffers
-
-
-
-
-
-
 ("Setup/Setup.scd").loadRelative;
 
-Pan2.ar(Synth(\grainBuf,[\freq,400]))
-
-
-d["etnico"][0]
-
-Synth(\BUFSynth),[\sndbuf, b.orquesta[4], \amp, 1])!2;
+//Cargar los Buffers
 
 (
 b = ();
-b.orquesta = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/orquesta/").entries.collect({|n|
+b.etnico = PathName("/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/etnico/").entries.collect({|n|
 	Buffer.readChannel(s,n.fullPath, channels:[0]);
 });
 )
-{b.orquesta[3]!2}.play
 
-b.orquesta[2].play
+(
+c = ();
+c.k = PathName("/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/k/").entries.collect({|n|
+	Buffer.readChannel(s,n.fullPath, channels:[0]);
+});
+)
+
+c.k[6].play
 
 
-
-
-b = Buffer.readChannel(s, "/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/orquesta/debussy_98.mp3");
 
 
 (
@@ -55,40 +30,32 @@ l = Prewrite(1, // start with 1
         ), 4);
 
 ~a = Pbind(
-	\instrument, \grainbuf,
-	\buf, b.orquesta[0],
+	\instrument, \BUFSynth,
+	\buf, c.k[6],
 	\dur,l,
-	\amp, 1000000,
-	\rate, 0.5
+	\amp, 1,
+	\rate, 0.4
 
 )
 )
-~a.pause
+~a.stop
 
 ~a.play
 
 
+Synth(\BUFSynth, [\buf, ])
 
+SynthDef(\BUFSynth, {
+	var sig, env;
+	env = Env.perc(\atk.ir(0.001),\rel.ir(0.1)).ar(2);
+	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1));
+	sig = Pan2.ar(sig, \pos.ir(0),\amp.ir(0.5));
+	sig = sig * env;
 
+	Out.ar(\out.ir(0), sig);
+};
+)
 
-
-
-
-SCLOrkSynths.gui
-
-Routine{
-	var frequencies;
-	frequencies = 40 * (1..8).nthPrime;
-	loop{
-		Routine{
-			var synth;
-			synth = Synth(padHO, [freq:frequencies.choose]);
-			rrand(8.0,16.0).wait;
-			synth.set(gate, 0);
-		}.play;
-		rrand(0.3,0.1).wait;
-	};
-}.play
 
 
 

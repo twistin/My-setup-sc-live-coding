@@ -1519,7 +1519,7 @@ SynthDef(\BUFSynth, {
 	sig = sig * env;
 
 	Out.ar(\out.ir(0), sig);
-}
+};
 )
 ;
 
