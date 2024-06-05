@@ -1,25 +1,56 @@
 
 ("Setup/Setup.scd").loadRelative;
 
+
+
+(
+~mix.ar;
+(
+~verb = {
+	XFade2.ar(
+		LPF.ar(
+			GVerb.ar(
+				~mix.ar(1), 80,8, maxroomsize:1000),
+			8500
+		),
+		~mix, \pan.kr(0,0.5),\rel.kr(0.15)
+	)
+};
+~verb.play;
+)
+)
+
+
+b["etnico"][0]
+
+
+
 //Cargar los Buffers
+
+
+
+
+
+
+
 
 (
 b = ();
-b.etnico = PathName("/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/etnico/").entries.collect({|n|
+b.etnico = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/etnico/").entries.collect({|n|
 	Buffer.readChannel(s,n.fullPath, channels:[0]);
 });
 )
 
 (
 c = ();
-c.k = PathName("/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/k/").entries.collect({|n|
+c.k = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/etnico/").entries.collect({|n|
 	Buffer.readChannel(s,n.fullPath, channels:[0]);
 });
 )
+b.keys
+b.etnico[0].play
 
-c.k[6].play
-
-
+c.k[0].play
 
 
 (
@@ -31,13 +62,14 @@ l = Prewrite(1, // start with 1
 
 ~a = Pbind(
 	\instrument, \BUFSynth,
-	\buf, c.k[6],
+	\buf, c.k[0],
 	\dur,l,
 	\amp, 1,
 	\rate, 0.4
 
 )
 )
+~a
 ~a.stop
 
 ~a.play
@@ -57,14 +89,14 @@ SynthDef(\BUFSynth, {
 )
 
 
+~mix = {~a}
 
-
-
+~a.pauseh
 (
 	~p = Pbind(
 		\instrument,\tgrains,
 		\dur, 0.256,
-		\buf, b.orquesta[0], inf)
+		\buf, b.etnico[0], inf),
 	)
 
 
@@ -108,9 +140,15 @@ s
 Synth(\simplePulse)
 
 
+~x = Tdef(\tdf, {
+	loop{
 
+		{SinOsc.ar(234)* Env.perc(00.1, 1,0.5,-4)!2};
+		0.50;
+};
+})
 
-
+~x.pause
 
 
 (
@@ -132,3 +170,12 @@ Synth(\simplePulse)
 ////////////////////////////////////////
 
 
+
+
+
+
+
+
+
+
+TdefAllGui.new(numItems:8,parent,bounds,makeSkip:true,
