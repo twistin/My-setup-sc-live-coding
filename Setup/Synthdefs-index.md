@@ -2,7 +2,7 @@
 
 ## Kicks
 
-- **808**
+- **kick808**
   
   **argumetos**: ```out, freq1, freq2, amp,ringTime, att, rel , dist, pan```
 
@@ -58,9 +58,9 @@
 
 - ksBass
 
-- noQuarterBass
+- noQuarter
 
-- rubberBandBass
+- rubberBand
 
 - subBass2
 
@@ -68,33 +68,37 @@
 
 - FMRhodes1
 
-- cs80leadMH
+- <u>cs80leadMH</u>
 
-- Harpsichord2
+- harpsichord2
 
 ## Miscelanea
 
-- Ping
+- ping_mh
 
-- vintage synth
+- vintageSine
 
 - noysy
 
-- Decimator
+- decimator
 
-- blip1
+- <u>blip1</u>
 
 ## Sintesis granular
 
 - grainbuf
 
+## Buffer
+
+- BUFSynth
+
 ## Drones
 
-- droneFM01
+- droneFM
 
 - droneFMPulse
 
-- simpledrone
+- simpledron
 
 ## Pad
 
@@ -106,23 +110,23 @@
 
 - feedbackPad1
 
-- feedbackPad3
+- <u>feedbackPad3</u>
 
-- superSaw
+- <u>superSaw</u>
 
 ## Percusion
 
 - abstractDrum
 
-- frameDrum
+- <u>frameDrum</u>
 
 - marimba1
 
 - metalPlate
 
-- modalmarimba
+- modalMarimba
 
-- crotales
+- pmCrotales
 
 ## FX
 
@@ -138,15 +142,13 @@
 
 ## Winds
 
-- waveguideFlute
+- <u>waveguideFlute</u>
 
 ## Guitar
 
-- pluck
-
 - modalElectricGuitar
 
-- distiorted guitar
+- distortedGuitar
 
 ## Simple SynthDef
 

@@ -102,7 +102,17 @@ c.techno[0].play
 d.keys
 d["k"][0].play
 
-Synth(\setPerc2,[\buf,d["orquesta"][0]])
+
+
+s
+Synth(\simplePulse)
+
+
+
+
+
+
+
 (
 
 ~z = Pbind(
@@ -119,6 +129,6 @@ Synth(\setPerc2,[\buf,d["orquesta"][0]])
 ~z.play
 
 ~z.stop
-
+////////////////////////////////////////
 
 
