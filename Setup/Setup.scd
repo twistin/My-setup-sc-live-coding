@@ -16,6 +16,12 @@ s.options.memSize = 8192 * 128;
 //boot the server
 s.boot;
 
+// setup midi (controlador y Logic)
+
+MIDIIn.connectAll;
+
+m = MIDIOut.new(0);
+m.latency = 0;
 
 // display nodeTree
 
@@ -25,12 +31,16 @@ s.plotTreeView(parent: v);
 //display the oscilloscope
 s.scope;
 
+// Abre Logic Pro X
+"open -a '/Applications/Logic Pro X.app/'".unixCmd;
+
+
 //start proxyspace
 p=ProxySpace.push(s);
 //start tempo clock
 p.makeTempoClock;
 //give proxyspace a tempo
-t = p.clock.tempo_(96/60);
+t = p.clock.tempo_(100/60);
 
 p.fadeTime_(2.5);
 p.quant_(4);
@@ -55,6 +65,7 @@ Task({
 	3.wait;
 	//activate StageLimiter - Part of the BatLib quark
 	StageLimiter.activate;
+"Logic Pro ahora deberá estar abierto..".postln;
 	"Setup done!".postln;
 }).start;
 

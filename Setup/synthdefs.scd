@@ -1513,7 +1513,7 @@ SynthDef(\grainbuf, {
 
 SynthDef(\BUFSynth, {
 	var sig, env;
-	env = Env.perc(\atk.ir(0.001),\rel.ir(0.1)).ar(2);
+	env = Env.linen(\atk.ir(0.5),\sus.ir(1),\rel.ir(0.5),1,\cur.ir(-2)).ar(2);
 	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1));
 	sig = Pan2.ar(sig, \pan.ir(0),\amp.ir(0.5));
 	sig = sig * env;
@@ -1522,7 +1522,7 @@ SynthDef(\BUFSynth, {
 }).add;
 
 
-
+Synth(\BUFSynth, [\buf,b.voces[0]])
 ///////////////////////// Drones /////////// ///////////////////////////////////////////
 
 
@@ -1579,7 +1579,7 @@ SynthDef(\droneFMPulse, {
     Out.ar(\out.kr(0), sig1);
 }).add;
 
-
+Synth(\droneFMPulse)
 //simpledron
 
 SynthDef(\simpledron, {

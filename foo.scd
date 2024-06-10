@@ -179,3 +179,64 @@ Synth(\simplePulse)
 
 
 TdefAllGui.new(numItems:8,parent,bounds,makeSkip:true,
+
+
+
+~out.play;~out.awake = false; // allow sound object assignment without immediate sending
+
+// putting an synthdef into the node proxy without playing it right away
+// the synthdef has an envelope that frees by itself.
+(
+~out = SynthDef("a", { arg out=0, freq=800, pmf=1.0, pan;
+        var env, u;
+        env = EnvGen.kr(Env.perc(0.001, 0.04, 0.4),doneAction: Done.freeSelf); // envelope
+        u = SinOsc.ar(freq * Rand(0.9, 1.1), SinOsc.ar(pmf, 0, pi), env);
+        Out.ar(out, Pan2.ar(u, pan))
+    })
+);
+
+
+// create a task to repeatedly send grains
+(
+t = Task.new({
+    loop({
+        // starts a synth with the current synthdef at index 0
+        ~out.spawn([\pmf, [1, 20, 300].choose, \pan, [0, -1, 1].choose]);
+        [0.1, 0.01, 0.25].choose.wait;
+    })
+});
+)
+
+t.start;
+t.stop;
+t.start;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
