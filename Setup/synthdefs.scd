@@ -4,6 +4,202 @@
 
              //////// Biblioteca SynthDef ////////
 
+
+
+                   /////// I Ching Rítmico /////////////
+
+
+/// 1   -- 240 Plucks --
+
+SynthDef("plucking", {arg out = 0, amp = 0.1, freq = 440, decay = 5, coef = 0.1;
+	var env, snd;
+	env = EnvGen.kr(Env.linen(0, decay, 0), doneAction: 2);
+	snd = Pluck.ar(
+		in: PinkNoise.ar(amp),
+		trig: Impulse.kr(0),
+		maxdelaytime: 0.1,
+		delaytime: freq.reciprocal,
+		decaytime: decay,
+		coef: coef);
+	snd = LeakDC.ar(snd).clip2;
+	Out.ar(out, snd * env);
+}).add;
+
+b = Bus.audio(s,1);
+
+SynthDef("reverbBus", { arg outBus = 0, inBus, wet = 0.5;
+	var input, rev;
+	input = In.ar(inBus,1);
+	rev = JPverb.ar(input * wet, t60:3);
+    Out.ar(outBus, input + rev);
+}).add;
+
+// 2  -- Risset rhythm --
+
+(
+SynthDef(\risset, {
+    |out = 0, buf, megabardur = 3.0, bufdur = 3.0, level = 0, bandwidth = 1, centerrate = 1, dir = 1|
+    var t, rate, snd, power;
+    t = Sweep.kr * dir;
+    rate = bufdur * 2.log / megabardur * pow(2, t / megabardur + level);
+    power = (pi * bandwidth * 0.5 * log2(rate / centerrate)).clip2(pi).cos + 1 / 2;
+    snd = PlayBuf.ar(1, b, BufRateScale.kr(b) * rate, loop: 1) * power;
+    EnvGen.kr(Env([0, 0], [megabardur]), doneAction: 2);
+    Out.ar(out, Pan2.ar(snd));
+}).add;
+)
+
+
+// 3          HOME
+
+(
+SynthDef("grain-asr", {arg buffer, rate = 1, startPos = 0, gate = 1, att = 0.01, rel = 0.1, amp = 1, pan = 0;
+	var env, snd;
+	env = Env.asr(att, amp, rel).kr(gate: gate, doneAction: 2);
+	snd = PlayBuf.ar(1, buffer, rate: rate, startPos: startPos * BufSamples.kr(buffer));
+	snd = snd * env;
+	Out.ar(0, Pan2.ar(snd, pan));
+}).add;
+
+SynthDef("fm2_a", {arg freq = 440, modindex = 10, amp = 0.1, pos = 0, gate = 1, att = 0.01, rel = 0.3;
+	var carrier, modulator, freqdev, env, modfreq;
+	modindex = Line.kr(modindex, 1, att);
+	modfreq = freq / 2;
+	freqdev = modfreq * modindex;
+	modulator = Pulse.ar(freq: modfreq, mul: freqdev);
+	carrier = SinOsc.ar(freq: [freq + modulator, freq * 1.011 + modulator]);
+	carrier = carrier + SinOsc.ar(freq: [freq + modulator, freq * 1.011 + modulator] * 1/2);
+	env = Env.asr(
+		attackTime: att,
+		sustainLevel: amp,
+		releaseTime: rel
+	).kr(doneAction: 2, gate: gate);
+	carrier = carrier + FreeVerb.ar(in: carrier, mix: 0.33, room: 0.75, damp: 0.25, mul: 1, add: 0);
+	carrier = Pan2.ar(in: carrier, pos: pos, level: env);
+	Out.ar(0, carrier * amp);
+}).add;
+
+//plugin: MdaPiano
+SynthDef("chords1", { |out=0, freq=440, gate=1, amp=0.5, att=0.1, rel=0.01|
+	var env = Env.adsr(
+		attackTime: 0.01,
+		decayTime: att,
+		releaseTime: rel).kr(doneAction: 2);
+	var snd = MdaPiano.ar(freq: [freq, freq], gate: gate, release: 0, tune: 0.9, stereo: 0.3, sustain: 0, mul: env * 1/2);
+    DetectSilence.ar(snd, 0.01);
+    Out.ar(out, snd * 0.5);
+}).add;
+
+SynthDef("chords2", { |out=0, freq=440, gate=1, amp=0.5, att=0.1, rel=0.01|
+	var env = Env.adsr(
+		attackTime: 0.01,
+		decayTime: att,
+		releaseTime: rel).kr(doneAction: 2);
+	var snd = MdaPiano.ar(freq: [freq, freq], gate: gate, release: 0, tune: 0.7, stereo: 0.3, sustain: 0, mul: env * amp);
+    DetectSilence.ar(snd, 0.01);
+    Out.ar(out, snd * amp);
+}).add;
+
+//drumkit adapted from: http://sccode.org/1-54H
+SynthDef("snare", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
+	var env, snd1, snd2, sum;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	snd1 = HPF.ar(
+		in: WhiteNoise.ar,
+		freq: ffreq,
+		mul: env
+	);
+	snd2 = SinOsc.ar(freq: sinfreq, mul: env);
+	sum = snd1 + snd2;
+	Out.ar(out, Pan2.ar(sum, pan));
+}).add;
+
+SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
+	var env, snd, ramp;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	ramp = XLine.kr(
+		start: sinfreq,
+		end: sinfreq * glissf,
+		dur: rel
+	);
+	snd = SinOsc.ar(freq: ramp, mul: env);
+	snd = Pan2.ar(snd, pan);
+	Out.ar(out, snd);
+}).add;
+
+
+SynthDef("am1_b", {arg freq = 440, modfreq = 2, amp = 0.2, att = 0.01, rel = 3, out = 0, pan = 0;
+    var carrier, modulator, env;
+    env = Env.perc(
+        attackTime: att,
+        releaseTime: rel,
+        level: amp
+    ).kr(2);
+    modulator = LFSaw.ar(modfreq).range(0, 1);
+	carrier = LFTri.ar(freq: [freq * 0.25, freq * 0.15], mul: env * modulator * 10);
+	carrier = Pan2.ar(in: carrier, pos: pan);
+	Out.ar(out, carrier);
+}).add;
+
+SynthDef("am1_a", {arg freq = 440, modfreq = 2, amp = 0.2, att = 0.01, rel = 3, out = 0, pan = 0;
+    var carrier, modulator, env;
+    env = Env.perc(
+        attackTime: att,
+        releaseTime: rel,
+        level: amp
+    ).kr(2);
+    modulator = SinOsc.ar(modfreq).range(0, 1);
+	carrier = SinOsc.ar(freq: [freq * 1.15, freq * 0.35], mul: env * modulator * 10);
+	carrier = Pan2.ar(in: carrier, pos: pan);
+	Out.ar(out, carrier * amp);
+}).add;
+
+
+SynthDef("waves", { arg dur = 1, amp = 0.5;
+	var env = Env.pairs([[0,0], [0.4, 1], [1, 0.2], [1.1, 0.5], [1.5, 0.2], [2, 0.5], [2.4, 0.7], [3.5, 0], [4, 1], [4.5, 0.7], [5, 0.8],[5.5, 0.3], [6, 0.5], [9, 0]], \lin);
+	var snd = Splay.ar(PinkNoise.ar([440, 442], mul: env.kr(doneAction: 2) * amp));
+	Out.ar(0, snd);
+}).add;
+)
+
+
+//////////////////////////////
+/////// 4  ALGORITHMIC BEATS
+//////////////////////////////
+
+
+// SynthDef and Ndef
+~tp = 145/60; // 145 BPM
+SynthDef(\sin, {arg freq=50, lw=0, index=1000, lpF=20000, hpF=40, mix=0.75, dur, amp=0.125, pan=0, out=0;
+	var env = {arg dr, ml; Decay.ar(Impulse.ar(0),dr,ml)};
+	var src1 = SinOsc.ar(
+		freq+env.(dur*Rand(0.05,0.125),freq*(IRand(4,16))),2pi,
+		env.(dur,amp*mix)
+	);
+	var src2 = SinOscFB.ar(
+		freq+(src1*index),Rand(lw,2),env.(dur*Rand(0.05,1),amp*(1-mix))
+	);
+	var src = Pan2.ar(src1+src2,pan);
+	var free = DetectSilence.ar(src,doneAction:2);
+	src = LPF.ar(src,lpF);
+	src = HPF.ar(src,hpF);
+
+	Out.ar(out,Compander.ar(src,src,0.25,1,1/4,0.01,0.1))
+}).store;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                       ////// Drums //////////
                       ////// KICKS /////
 
@@ -1528,9 +1724,10 @@ SynthDef(\BUFSynth, {
 
 
 // FUENTE: https://recarteblog.wordpress.com/
+
+
+
 //droneFM01
-
-
 SynthDef(\droneFM, {
 	arg f1Freq=0.1, f2Freq=1.1, f3Freq=2.2, nFreq=440, m1Ratio=1, m2Ratio=2, m3Ratio=3,
 	amp=0.1, dur=55, ampM=0.84 , pan=0;
