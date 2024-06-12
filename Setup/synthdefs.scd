@@ -1509,11 +1509,11 @@ SynthDef(\grainbuf, {
 
 }).add;
 
-/////////////////////////  BUFSynth //////////
+/////////////////////////  Sintes para bufferes //////////
 
-SynthDef(\BUFSynth, {
+SynthDef(\bufsynth, {
 	var sig, env;
-	env = Env.linen(\atk.ir(0.5),\sus.ir(1),\rel.ir(0.5),1,\cur.ir(-2)).ar(2);
+	env = Env.linen(\atk.ir(0.5),\sus.ir(0.5),\rel.ir(0.5),1,\cur.ir(-2)).ar(2);
 	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1));
 	sig = Pan2.ar(sig, \pan.ir(0),\amp.ir(0.5));
 	sig = sig * env;
@@ -1521,8 +1521,25 @@ SynthDef(\BUFSynth, {
 	Out.ar(\out.ir(0), sig);
 }).add;
 
+SynthDef(\pbufm,
+	{arg out = 0, buf = 0, rate = 1, amp = 0.5, pan = 0, pos = 0, rel=15;
+		var sig,env ;
+		sig = Mix.ar(PlayBuf.ar(1,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
+		env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
+		sig = sig * env;
+		sig = sig * amp;
+		Out.ar(out,Pan2.ar(sig,pan));
+}).add;
+SynthDef(\pbufs,
+	{arg out = 0, buf = 0, rate = 1, amp = 0.5, pan = 0, pos = 0, rel=15;
+		var sig,env ;
+		sig = Mix.ar(PlayBuf.ar(1,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
+		env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
+		sig = sig * env;
+		sig = sig * amp;
+		Out.ar(out,Pan2.ar(sig,pan));
+}).add;
 
-Synth(\BUFSynth, [\buf,b.voces[0]])
 ///////////////////////// Drones /////////// ///////////////////////////////////////////
 
 
@@ -1579,7 +1596,7 @@ SynthDef(\droneFMPulse, {
     Out.ar(\out.kr(0), sig1);
 }).add;
 
-Synth(\droneFMPulse)
+
 //simpledron
 
 SynthDef(\simpledron, {

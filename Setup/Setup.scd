@@ -22,6 +22,12 @@ MIDIIn.connectAll;
 
 m = MIDIOut.new(0);
 m.latency = 0;
+CmdPeriod.add({
+	(0..127).do({
+		arg n;
+		m.noteOff(0,n);
+	});
+});
 
 // display nodeTree
 

@@ -96,7 +96,11 @@
 
 - droneFM
 
-- droneFMPulse
+- **droneFMPulse**
+  
+  **argumentos** ```sig, sig1, sig2, sig3, mod1, mod2, mod3, env, index;
+  
+      index = LFNoise1.kr(0.5).range(2,12);```
 
 - simpledron
 
