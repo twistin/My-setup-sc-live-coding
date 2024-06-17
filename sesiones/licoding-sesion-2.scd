@@ -10,7 +10,7 @@ m.noteOff(0,60,64)
 
 	\octave, [7],
 	\midinote, Pxrand(Scale.zhi.degrees+50,inf),
-	\dur, 0.50,
+	\dur, 0.5,
 	\midicmd, \noteOn,
 	\midiout,m,
 	\amp,0.3,
