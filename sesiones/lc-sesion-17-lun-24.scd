@@ -1,12 +1,22 @@
+("../Setup/Setup.scd").loadRelative;
+
+
 (
-SynthDef(\tone, {
-	var sig, env;
-	env = Env.adsr(
-		\atk.ir(0.001), \dec.ir(0.2), \slev.ir(0.4), \rel.ir(0.3)
-	).ar(Done.freeSelf, \gate.kr(1));
-	sig = LFTri.ar(\freq.kr(880));
-	sig = Pan2.ar(sig, \pan.kr(0), \amp.kr(0.3));
-	sig = sig * env;
-	Out.ar(\out.kr(0), sig);
-}).add;
+~mix.ar;
+(
+~verb = {
+	XFade2.ar(
+		LPF.ar(
+			GVerb.ar(
+				~mix.ar(1), 80,8, maxroomsize:1000),
+			8500
+		),
+		~mix, \pan.kr(0,0.5),\rel.kr(0.15)
+	)
+};
+~verb.play;
 )
+)
+
+
+∫
