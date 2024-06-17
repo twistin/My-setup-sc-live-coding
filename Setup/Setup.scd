@@ -21,6 +21,12 @@ s.boot;
 MIDIIn.connectAll;
 m = MIDIOut.new(0);
 m.latency = 0;
+CmdPeriod.add({
+	(0..127).do({
+		arg n;
+		m.noteOff(0,n);
+	});
+});
 
 // display nodeTree
 
@@ -39,7 +45,7 @@ p=ProxySpace.push(s);
 //start tempo clock
 p.makeTempoClock;
 //give proxyspace a tempo
-t = p.clock.tempo_(100/60);
+t = p.clock.tempo_(90/60);
 
 p.fadeTime_(2.5);
 p.quant_(4);

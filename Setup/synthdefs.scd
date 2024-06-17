@@ -4,202 +4,6 @@
 
              //////// Biblioteca SynthDef ////////
 
-
-
-                   /////// I Ching Rítmico /////////////
-
-
-/// 1   -- 240 Plucks --
-
-SynthDef("plucking", {arg out = 0, amp = 0.1, freq = 440, decay = 5, coef = 0.1;
-	var env, snd;
-	env = EnvGen.kr(Env.linen(0, decay, 0), doneAction: 2);
-	snd = Pluck.ar(
-		in: PinkNoise.ar(amp),
-		trig: Impulse.kr(0),
-		maxdelaytime: 0.1,
-		delaytime: freq.reciprocal,
-		decaytime: decay,
-		coef: coef);
-	snd = LeakDC.ar(snd).clip2;
-	Out.ar(out, snd * env);
-}).add;
-
-b = Bus.audio(s,1);
-
-SynthDef("reverbBus", { arg outBus = 0, inBus, wet = 0.5;
-	var input, rev;
-	input = In.ar(inBus,1);
-	rev = JPverb.ar(input * wet, t60:3);
-    Out.ar(outBus, input + rev);
-}).add;
-
-// 2  -- Risset rhythm --
-
-(
-SynthDef(\risset, {
-    |out = 0, buf, megabardur = 3.0, bufdur = 3.0, level = 0, bandwidth = 1, centerrate = 1, dir = 1|
-    var t, rate, snd, power;
-    t = Sweep.kr * dir;
-    rate = bufdur * 2.log / megabardur * pow(2, t / megabardur + level);
-    power = (pi * bandwidth * 0.5 * log2(rate / centerrate)).clip2(pi).cos + 1 / 2;
-    snd = PlayBuf.ar(1, b, BufRateScale.kr(b) * rate, loop: 1) * power;
-    EnvGen.kr(Env([0, 0], [megabardur]), doneAction: 2);
-    Out.ar(out, Pan2.ar(snd));
-}).add;
-)
-
-
-// 3          HOME
-
-(
-SynthDef("grain-asr", {arg buffer, rate = 1, startPos = 0, gate = 1, att = 0.01, rel = 0.1, amp = 1, pan = 0;
-	var env, snd;
-	env = Env.asr(att, amp, rel).kr(gate: gate, doneAction: 2);
-	snd = PlayBuf.ar(1, buffer, rate: rate, startPos: startPos * BufSamples.kr(buffer));
-	snd = snd * env;
-	Out.ar(0, Pan2.ar(snd, pan));
-}).add;
-
-SynthDef("fm2_a", {arg freq = 440, modindex = 10, amp = 0.1, pos = 0, gate = 1, att = 0.01, rel = 0.3;
-	var carrier, modulator, freqdev, env, modfreq;
-	modindex = Line.kr(modindex, 1, att);
-	modfreq = freq / 2;
-	freqdev = modfreq * modindex;
-	modulator = Pulse.ar(freq: modfreq, mul: freqdev);
-	carrier = SinOsc.ar(freq: [freq + modulator, freq * 1.011 + modulator]);
-	carrier = carrier + SinOsc.ar(freq: [freq + modulator, freq * 1.011 + modulator] * 1/2);
-	env = Env.asr(
-		attackTime: att,
-		sustainLevel: amp,
-		releaseTime: rel
-	).kr(doneAction: 2, gate: gate);
-	carrier = carrier + FreeVerb.ar(in: carrier, mix: 0.33, room: 0.75, damp: 0.25, mul: 1, add: 0);
-	carrier = Pan2.ar(in: carrier, pos: pos, level: env);
-	Out.ar(0, carrier * amp);
-}).add;
-
-//plugin: MdaPiano
-SynthDef("chords1", { |out=0, freq=440, gate=1, amp=0.5, att=0.1, rel=0.01|
-	var env = Env.adsr(
-		attackTime: 0.01,
-		decayTime: att,
-		releaseTime: rel).kr(doneAction: 2);
-	var snd = MdaPiano.ar(freq: [freq, freq], gate: gate, release: 0, tune: 0.9, stereo: 0.3, sustain: 0, mul: env * 1/2);
-    DetectSilence.ar(snd, 0.01);
-    Out.ar(out, snd * 0.5);
-}).add;
-
-SynthDef("chords2", { |out=0, freq=440, gate=1, amp=0.5, att=0.1, rel=0.01|
-	var env = Env.adsr(
-		attackTime: 0.01,
-		decayTime: att,
-		releaseTime: rel).kr(doneAction: 2);
-	var snd = MdaPiano.ar(freq: [freq, freq], gate: gate, release: 0, tune: 0.7, stereo: 0.3, sustain: 0, mul: env * amp);
-    DetectSilence.ar(snd, 0.01);
-    Out.ar(out, snd * amp);
-}).add;
-
-//drumkit adapted from: http://sccode.org/1-54H
-SynthDef("snare", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
-	var env, snd1, snd2, sum;
-	env = Env.perc(att, rel, amp).kr(doneAction: 2);
-	snd1 = HPF.ar(
-		in: WhiteNoise.ar,
-		freq: ffreq,
-		mul: env
-	);
-	snd2 = SinOsc.ar(freq: sinfreq, mul: env);
-	sum = snd1 + snd2;
-	Out.ar(out, Pan2.ar(sum, pan));
-}).add;
-
-SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
-	var env, snd, ramp;
-	env = Env.perc(att, rel, amp).kr(doneAction: 2);
-	ramp = XLine.kr(
-		start: sinfreq,
-		end: sinfreq * glissf,
-		dur: rel
-	);
-	snd = SinOsc.ar(freq: ramp, mul: env);
-	snd = Pan2.ar(snd, pan);
-	Out.ar(out, snd);
-}).add;
-
-
-SynthDef("am1_b", {arg freq = 440, modfreq = 2, amp = 0.2, att = 0.01, rel = 3, out = 0, pan = 0;
-    var carrier, modulator, env;
-    env = Env.perc(
-        attackTime: att,
-        releaseTime: rel,
-        level: amp
-    ).kr(2);
-    modulator = LFSaw.ar(modfreq).range(0, 1);
-	carrier = LFTri.ar(freq: [freq * 0.25, freq * 0.15], mul: env * modulator * 10);
-	carrier = Pan2.ar(in: carrier, pos: pan);
-	Out.ar(out, carrier);
-}).add;
-
-SynthDef("am1_a", {arg freq = 440, modfreq = 2, amp = 0.2, att = 0.01, rel = 3, out = 0, pan = 0;
-    var carrier, modulator, env;
-    env = Env.perc(
-        attackTime: att,
-        releaseTime: rel,
-        level: amp
-    ).kr(2);
-    modulator = SinOsc.ar(modfreq).range(0, 1);
-	carrier = SinOsc.ar(freq: [freq * 1.15, freq * 0.35], mul: env * modulator * 10);
-	carrier = Pan2.ar(in: carrier, pos: pan);
-	Out.ar(out, carrier * amp);
-}).add;
-
-
-SynthDef("waves", { arg dur = 1, amp = 0.5;
-	var env = Env.pairs([[0,0], [0.4, 1], [1, 0.2], [1.1, 0.5], [1.5, 0.2], [2, 0.5], [2.4, 0.7], [3.5, 0], [4, 1], [4.5, 0.7], [5, 0.8],[5.5, 0.3], [6, 0.5], [9, 0]], \lin);
-	var snd = Splay.ar(PinkNoise.ar([440, 442], mul: env.kr(doneAction: 2) * amp));
-	Out.ar(0, snd);
-}).add;
-)
-
-
-//////////////////////////////
-/////// 4  ALGORITHMIC BEATS
-//////////////////////////////
-
-
-// SynthDef and Ndef
-~tp = 145/60; // 145 BPM
-SynthDef(\sin, {arg freq=50, lw=0, index=1000, lpF=20000, hpF=40, mix=0.75, dur, amp=0.125, pan=0, out=0;
-	var env = {arg dr, ml; Decay.ar(Impulse.ar(0),dr,ml)};
-	var src1 = SinOsc.ar(
-		freq+env.(dur*Rand(0.05,0.125),freq*(IRand(4,16))),2pi,
-		env.(dur,amp*mix)
-	);
-	var src2 = SinOscFB.ar(
-		freq+(src1*index),Rand(lw,2),env.(dur*Rand(0.05,1),amp*(1-mix))
-	);
-	var src = Pan2.ar(src1+src2,pan);
-	var free = DetectSilence.ar(src,doneAction:2);
-	src = LPF.ar(src,lpF);
-	src = HPF.ar(src,hpF);
-
-	Out.ar(out,Compander.ar(src,src,0.25,1,1/4,0.01,0.1))
-}).store;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                       ////// Drums //////////
                       ////// KICKS /////
 
@@ -889,6 +693,22 @@ metadata: (
 
 ////// BASS
 
+SynthDef(\bass, { arg out=0, amp=0.1, gate=1, pan=0, spread=0.8, freq=200, doneAction=2;
+	var sig, sig1, sig2, sig3;
+	freq = SinOsc.ar(freq*\fmfreq.kr(1).lag(0.3)) * \fmrange.kr(0.5).lag(0.3) * LFNoise1.kr(1/7).range(0.9,1.1) + 1 * freq;
+	sig = SinOsc.ar(freq.lag(0.1) * [1,8,2,4,1.002]);
+	sig1 = LFPulse.ar(freq * [1,4,1.001,2 * LFNoise1.kr(1/10).range(0.999,1.001),1/2], mul:1.00);
+	sig = sig + sig1;
+	sig = sig.fold2(SinOsc.kr(1/13).range(0.9,1));
+	sig = sig.wrap2(SinOsc.kr(1/14).range(0.9,1));
+	sig = RLPF.ar(sig, \lpf.kr(500).lag(0.4) * LFNoise1.kr(1/9).range(0.9,1.1), \rq.kr(0.5));
+	sig = HPF.ar(sig, \hpf.kr(40));
+	sig = sig * EnvGen.ar(\iadsr.kr(Env.adsr(0.01,0.1,0.8,0.1)),\igate.kr(1),doneAction:0);
+	sig = sig * EnvGen.ar(\adsr.kr(Env.adsr(0.01,0.1,0.8,0.1)),gate,doneAction:doneAction);
+	sig = Splay.ar(sig, spread, amp, pan);
+	Out.ar(out, sig);
+}).add;
+
 //doubleBass
 
 
@@ -1236,6 +1056,24 @@ metadata: (
 	tags: [\pitched]
 	)
 ).add;
+//   plucking
+
+
+SynthDef("plucking", {arg out = 0, amp = 0.1, freq = 440, decay = 5, coef = 0.1;
+	var env, snd;
+	env = EnvGen.kr(Env.linen(0, decay, 0), doneAction: 2);
+	snd = Pluck.ar(
+		in: BrownNoise.ar(amp),
+		trig: Impulse.kr(0),
+		maxdelaytime: 0.1,
+		delaytime: freq.reciprocal,
+		decaytime: decay,
+		coef: coef);
+	snd = LeakDC.ar(snd).clip2;
+	Out.ar(out, snd * env);
+}).add;
+
+
 
 // subBass2
 
@@ -1705,29 +1543,45 @@ SynthDef(\grainbuf, {
 
 }).add;
 
-/////////////////////////  BUFSynth //////////
+/////////////////////////  Sintes para bufferes //////////
 
-SynthDef(\BUFSynth, {
+SynthDef(\bufsynth, {
 	var sig, env;
-	env = Env.linen(\atk.ir(0.5),\sus.ir(1),\rel.ir(0.5),1,\cur.ir(-2)).ar(2);
-	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1));
+	env = Env.linen(\atk.ir(0.5),\sus.ir(0.5),\rel.ir(0.5),1,\cur.ir(-2)).ar(2);
+	sig = PlayBuf.ar(1, \buf.ir(0), \rate.ir(1),1,\spos.ir(0.0));
 	sig = Pan2.ar(sig, \pan.ir(0),\amp.ir(0.5));
 	sig = sig * env;
 
 	Out.ar(\out.ir(0), sig);
 }).add;
 
+SynthDef(\pbufm,
+	{arg out = 0, buf = 0, rate = 1, amp = 0.5, pan = 0, pos = 0, rel=15;
+		var sig,env ;
+		sig = Mix.ar(PlayBuf.ar(1,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
+		env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
+		sig = sig * env;
+		sig = sig * amp;
+		Out.ar(out,Pan2.ar(sig,pan));
+}).add;
+SynthDef(\pbufs,
+	{arg out = 0, buf = 0, rate = 1, amp = 1, pan = 0, pos = 0, rel=15;
+		var sig,env ;
+		sig = Mix.ar(PlayBuf.ar(1,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
+		env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
+		sig = sig * env;
+		sig = sig * amp;
+		Out.ar(out,Pan2.ar(sig,pan));
+}).add;
 
-Synth(\BUFSynth, [\buf,b.voces[0]])
 ///////////////////////// Drones /////////// ///////////////////////////////////////////
 
 
 
 // FUENTE: https://recarteblog.wordpress.com/
-
-
-
 //droneFM01
+
+
 SynthDef(\droneFM, {
 	arg f1Freq=0.1, f2Freq=1.1, f3Freq=2.2, nFreq=440, m1Ratio=1, m2Ratio=2, m3Ratio=3,
 	amp=0.1, dur=55, ampM=0.84 , pan=0;
@@ -1776,7 +1630,7 @@ SynthDef(\droneFMPulse, {
     Out.ar(\out.kr(0), sig1);
 }).add;
 
-Synth(\droneFMPulse)
+
 //simpledron
 
 SynthDef(\simpledron, {
@@ -3054,7 +2908,7 @@ is starting the demo with an add9 chord, as every guitar demo should start.
 By Josh Mitchell August 2020.
 */
 
-SynthDef(\modalElectricGuitar, {
+SynthDef(\electricguitar, {
 	arg
 	// Standard values
 	out = 0, pan = 0, freq = 440, amp = 0.3, rel = 5,
@@ -3318,6 +3172,34 @@ SynthDef(\simpleSaw, {
 	Out.ar(\out.kr(0), sig);
 }).add;
 
+// bpfsaw
+
+SynthDef(\bpfsaw, {
+    arg atk = 2, sus = 0, rel = 3, c1 = 1, c2 = -1, freq = 500, detune = 0.2, cfhzmin = 0.1, cfhzmax = 0.3, cfmin = 500, cfmax = 2000, rqmin = 0.1, rqmax = 0.2, lsf = 200, ldb = 0, pan = 0, amp = 1, out = 0;
+
+    var sig, env;
+
+    env = Env([0, 1, 1, 0], [atk, sus, rel], [c1, 0, c2]).ar(2);
+
+    sig = Saw.ar(freq * { LFNoise1.kr(0.5, detune).midiratio } ! 2);
+
+    sig = BPF.ar(
+        sig,
+        { LFNoise1.kr(LFNoise1.kr(4).exprange(cfhzmin, cfhzmax)).exprange(cfmin, cfmax) } ! 2,
+        { LFNoise1.kr(0.1).exprange(rqmin, rqmax) } ! 2
+    );
+    sig = BLowShelf.ar(sig, lsf, 0.5, ldb);
+    sig = Balance2.ar(sig[0], sig[1], pan);
+
+    sig = sig * env * amp;
+    Out.ar(out, sig);
+}).add;
+
+
+
+
+
+
 // simpleLftri
 
 SynthDef(\simpleLftri, {
@@ -3350,5 +3232,115 @@ SynthDef(\simplePulse, {
 
 
 
+/// reverbbus
+
+b = Bus.audio(s,1);
+
+SynthDef("reverbBus", { arg outBus = 0, inBus, wet = 0.1;
+	var input, rev;
+	input = In.ar(inBus,1);
+	rev = JPverb.ar(input * wet, t60:6, damp:0.5);
+	DetectSilence.ar(rev, doneAction: Done.freeSelf);
+    Out.ar(outBus, input + (rev));
+}).add;
 
 
+// Glitch
+
+SynthDef(\chaosGlitch2, {
+	arg len = 10, fundFreq = 40, henA = 2, henB = 0.4, t = 1, gate = 1;
+	var mainEnv = EnvGen.kr(Env.triangle(len,1), gate, doneAction:2);
+	var speed = Array.geom(4, t, [1.75, 1.25].choose);
+	var freq = Array.geom(8, fundFreq*2, 1.5);
+	var pulse = {|rat1,rat2|LFPulse.ar(rat1, [0,0.5,1].choose)*LFPulse.ar(rat2)};
+	var a = Lag.ar(HenonN.ar(
+		speed.choose*(mainEnv*10000.rand),
+		henA, henB,
+	), 0.01);
+	var bass = SinOsc.ar(fundFreq!2*(a*1.0.rand), 0, Lag.ar(pulse.(t, speed.choose), 0.001));
+	var tone1 = SinOsc.ar([(fundFreq+Rand(0,5))*a,(fundFreq+Rand(0,5))*a], 0, 0.01*pulse.(speed.choose, speed.choose));
+	var tone2 = Pan2.ar(SinOsc.ar(freq.choose*a, 0, 0.1*pulse.(speed.choose, t)), a);
+	var tone3 = SinOsc.ar([freq.choose,freq.choose*a], 0, 0.05*pulse.(speed.choose, t))*mainEnv.round(0.25);
+	var noise = Pan2.ar(PinkNoise.ar(a*0.1*pulse.(t,t)), a);
+	var impulse = RLPF.ar(Impulse.ar(pulse.(t, speed.choose), a), freq.choose+(a*10), 0.01, 0.1).tanh;
+
+	Out.ar(0, (bass+tone1+tone2+tone3+noise+impulse)*\amp.ir(1).tanh);
+	}
+).store;
+
+
+SynthDef(\hasherTest,
+{
+arg rate = 1, freq = 60, index = 1000, tRate = 100,
+out = 0, fRate = 0.1;
+
+var t_trig = LFPulse.kr(0.5/fRate, 0.5);
+var random = LFNoise0.ar(rate, add:1);
+var noise = Hasher.ar(random);
+var sound = Saw.ar((freq+(noise*index)), Decay.kr(Impulse.kr(tRate), noise*0.001)).tanh;
+sound = Pan2.ar(sound, noise-0.3*2);
+FreeSelf.kr(t_trig);
+Out.ar(out, sound);
+}).store;
+
+
+
+
+
+//// ritmo
+
+
+(
+// Basic drum kit
+
+SynthDef("hihat", {arg out = 0, amp = 0.5, att = 0.01, rel = 0.2, ffreq = 6000, pan = 0;
+	var env, snd;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	snd = WhiteNoise.ar;
+	snd = HPF.ar(in: snd, freq: ffreq, mul: env);
+	Out.ar(out, Pan2.ar(snd, pan));
+}).add;
+
+SynthDef("snare", {arg out = 0, amp = 0.1, sinfreq = 180, att = 0.01, rel = 0.2, ffreq = 2000, pan = 0;
+	var env, snd1, snd2, sum;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	snd1 = HPF.ar(
+		in: WhiteNoise.ar,
+		freq: ffreq,
+		mul: env
+	);
+	snd2 = SinOsc.ar(freq: sinfreq, mul: env);
+	sum = snd1 + snd2;
+	Out.ar(out, Pan2.ar(sum, pan));
+}).add;
+
+SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
+	var env, snd, ramp;
+	env = Env.perc(att, rel, amp).kr(doneAction: 2);
+	ramp = XLine.kr(
+		start: sinfreq,
+		end: sinfreq * glissf,
+		dur: rel
+	);
+	snd = SinOsc.ar(freq: ramp, mul: env);
+	snd = Pan2.ar(snd, pan);
+	Out.ar(out, snd);
+}).add;
+
+// Basic saw synth for chords and bass
+SynthDef("sawSynth", { arg freq = 440, amp = 0.1, att = 0.1, rel = 2, lofreq = 1000, hifreq = 3000;
+    var env, snd;
+    env = Env.perc(
+		attackTime: att,
+		releaseTime: rel,
+		level: amp
+	).kr(doneAction: 2);
+    snd = Saw.ar(freq: freq * [0.99, 1, 1.001, 1.008], mul: env);
+	snd = LPF.ar(
+		in: snd,
+		freq: LFNoise2.kr(1).range(lofreq, hifreq)
+	);
+    snd = Splay.ar(snd);
+    Out.ar(0, snd);
+}).add;
+)
