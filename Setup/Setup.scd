@@ -19,7 +19,6 @@ s.boot;
 // setup midi (controlador y Logic)
 
 MIDIIn.connectAll;
-
 m = MIDIOut.new(0);
 m.latency = 0;
 

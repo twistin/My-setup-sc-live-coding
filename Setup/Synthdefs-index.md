@@ -8,7 +8,7 @@
 
 - **kickBlocks:**
   
-  **argumentos** ```out, pan, amp, curve, t1frq, t1harmonic,t1glide,t1att, t1relt1rel, t1glide, t2att , t2rel, t2curve, t2del, t2amp, h1freq, h1harmonic, h1glide, h1rq ,h1att , h1rel, h1curve , h1del, h1amp, h2freq, h2harmonic, h2glide, h2att, h2rel, h2curve, h2amp, cfreq, crq,camp```
+  **argumentos** ```out, pan[,]() amp, curve, t1frq, t1harmonic,t1glide,t1att, t1relt1rel, t1glide, t2att , t2rel, t2curve, t2del, t2amp, h1freq, h1harmonic, h1glide, h1rq ,h1att , h1rel, h1curve , h1del, h1amp, h2freq, h2harmonic, h2glide, h2att, h2rel, h2curve, h2amp, cfreq, crq,camp```
 
 - **kick_oto309**
   
