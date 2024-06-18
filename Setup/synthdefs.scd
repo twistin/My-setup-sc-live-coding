@@ -27,19 +27,7 @@ metadata: (
 )
 ).add;
 
-//kickBlocks
-/*
-This SynthDef combines three kick SynthDefs by Nathan Ho that use very similar building blocks.
-It should be very easy to add more of the same blocks for even more layers!
 
-Originals use Hasher.ar(Sweep.ar) as a quick way to generate deterministic white noise,
-to get exactly the same kick each time for a precise digital sampler effect.
-WhiteNoise.ar should work too.
-
-Some of the attacks are so fast that Env:kr doesn't correctly handle them.
-
-Modified and combined into one SynthDef by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("kickBlocks", {
 	arg
@@ -104,16 +92,7 @@ metadata: (
 
 );
 
-//"kick_oto309"
 
-/* Received from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/kick_oto309.scd
-
-A wide variety of sounds can be achieved through changing the "Other Controls" section.
-A siren sound is also available if you extend the attack and release.
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("kick_oto309", {
 	arg
@@ -147,16 +126,8 @@ metadata: (
 
 
 
-////// SNARES
-//oneclapThor
+////// SNARES //////////
 
-/* Received from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/oneclap_thor.scd
-
-published on the sc-users list 2009-01-08 by thor
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("oneclapThor", {
 	arg
@@ -226,14 +197,6 @@ metadata: (
 
 //snareElectro
 
-/* Retrieved from
-http://sccode.org/1-5aD
-
-Original by Nathan Ho aka Snappizz
-http://sccode.org/1-523
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("snareElectro", {
     arg
@@ -269,18 +232,8 @@ metadata: (
 ).add;
 
 
-////// TOMS
+////// TOMS //////////
 
-/* Retrieved from
-http://sccode.org/1-5aD
-
-DrumSynths SC Example - SOS Drums by Renick Bell, renick_at_gmail.com
-recipes from Gordon Reid in his Sound on Sound articles
-SOStom -------
-http://www.soundonsound.com/sos/Mar02/articles/synthsecrets0302.asp
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 // sosTom
 SynthDef("sosTom", {
@@ -324,20 +277,12 @@ metadata: (
 
 
 
-////// CLAPS
+////// CLAPS ////////
 
 //clapElectro
 
 
-/* Retrieved from
-http://sccode.org/1-5aD
 
-Original by Nathan Ho aka Snappizz, http://sccode.org/1-523
-
-**Note: Cool reverse-snare type sounds can be achieved with a slightly longer attack**
-
-Modified By Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("clapElectro", {
     arg
@@ -391,9 +336,7 @@ metadata: (
 /// clapOto309
 
 
-/*Retrieved from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/clap_oto309.scd
-*/
+
 
 SynthDef("clapOto309", {
 	arg out = 0, amp = 0.1, pan = 0;
@@ -433,22 +376,12 @@ metadata: (
 
 
 
-////// CYMBALS
+////// CYMBALS ////////
 
 //cymbalicMCLD
 
 
-/*
-Recieved from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/cymbalic_mcld.scd
 
-Based on the example at
-http://www.mcld.co.uk/cymbalsynthesis/
-published 2008 by Dan Stowell
-Synth(\cymbalic_mcld)
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19
-*/
 
 SynthDef(\cymbalicMCLD, {
 
@@ -494,19 +427,7 @@ metadata: (
 
 // cymbal808
 
-/*
-Retrieved from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/cymbal808_ryan.scd
 
-Published on sc-users 2007-08-25 by Ryan Brown
-
-alternate freqs values found in original:
-	[78.6, 140.44, 123.87, 219.4, 787.5, 531.3];
-	[300, 402.6, 369.36, 495.96, 585.69, 645.69];
-	[205.35, 254.29, 294.03, 304.41, 369.64, 522.71];
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\cymbal808, {
 	arg
@@ -560,24 +481,7 @@ metadata: (
 
 // hashercymbal
 
-/*
-Here's yet another cymbal synthdef. This one's kind of cool in that it uses a
-hash function to generate a really small chunk of sampled noise, which repeats
-with a frequency set by looprate. Then, this just gets sampled at a lower rate
-than supercollider's internal sample rate (see the decimator SynthDef for more
-on that), and sent through a high pass filter with a fairly smooth slope across
-most of the audible range of the sound.
 
-The samplerate control seems to affect the pitch of the signal more directly than
-the looprate control, but they do interact a lot, so it's probably easiest to just
-play around with both of these controls.
-
-The timbre control just alters the values the hash function sees, causing a slight
-change in timbre. If it's changed continually during a note, you can get some
-interesting noises.
-
-By Josh Mitchell June 2020
-*/
 
 SynthDef("hashercymbal", {
     arg
@@ -628,7 +532,7 @@ metadata: (
 
 
 
-////// HIHAT
+////// HIHAT ///////
 
 //hihat1
 
@@ -652,14 +556,7 @@ metadata: (
 
 // hihatElectro
 
-/* Retrieved from
-http://sccode.org/1-5aD
 
-By Nathan Ho aka Snappizz
-http://sccode.org/1-523
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("hihatElectro", {
     arg out = 0, pan = 0, amp = 0.3, att = 0.001, rel = 0.3, curve = -8, filterFreq = 4010, rq = 0.56;
@@ -691,7 +588,7 @@ metadata: (
 
 
 
-////// BASS
+////// BASS ////////////
 
 SynthDef(\bass, { arg out=0, amp=0.1, gate=1, pan=0, spread=0.8, freq=200, doneAction=2;
 	var sig, sig1, sig2, sig3;
@@ -712,35 +609,7 @@ SynthDef(\bass, { arg out=0, amp=0.1, gate=1, pan=0, spread=0.8, freq=200, doneA
 //doubleBass
 
 
-/*
-This Double Bass SynthDef, (originally called "~bass") was made by Matias Monteagudo on
-his Generative Jazz Project "MM – Coltrane’s Giant Steps," which can be found here:
-https://patchstorage.com/mm-giant-steps-with-visuals/
 
-First, a percussive envelope is defined in order to mimic the distinctive pluck of a double bass.
-Frequency modualation synthesis is used such that the sine oscillators "op1", "op2", "op3", and "op4" are
-operators with phase modulation. "op1", "op2", and "op3" share harmonic overtones while "op4" shares the fundamental
-frequency. "op4" utilizes slight frequency deviation, which can be altered through the "freqDev" argument. This frequency deviation alters the level of precision in the intonation of each note, such that a value of zero would create perfect intonation on each note. The "mul" arguments for each operator linearly increase or decrease the amplitude for their
-respective sine oscillators. Then, "op4" is passed through a delay line with multi-channel expansion. A high pass filter
-removes frequencies below human perception. The array of channels is then spread across the stereo field,
-and the "pan" and "sprd" argument can be used to alter this. A sub-bass is added which is correspondingly
-panned, and the "subAmp" argument linearly increases or decreases its amplitude. Lastly, a limiter provides protection
-in the event that extreme values are passed into the Synth.
-
-Modifications Made:
-- argument/variable names, formatting, and syntax were altered to better fit the SCLOrkSynth guidlines and conventions
-- documentation was added in the form of comments outlining processes throughout the SynthDef
-- a percussive envelope was substitutued over an ADSR envelope for the sake of optimization
-- a sub-bass was added to build a deeper double bass sound
-- the "pan", "sprd", "subAmp", and "freqDev" arguments were added and appropriatley substituted
-- the "maxdelaytime" argument in the DelayN UGen was altered to 0.06 to fit the maximum of the established "delaytime" range
-- constants in mul arguments throghout processes were multiplied together and reduced to simplify the SynthDef
-- a limiter was added to provide protection against large amplitudes
-
-By Matias Monteagudo, Prof. Composer, Salzburg Austria
-Description by Suhel Keswani
-SynthDef and Pattern modified by Suhel Keswani and Josh Mitchell, September 2020
-*/
 
 SynthDef("doubleBass", {
 	arg
@@ -823,33 +692,6 @@ metadata: (
 
 
 
-
-/*
-This is a synthDef based on Karplus-Strong synthesis (just like Pluck.ar).
-
-Karplus-Strong synthesis involves an initial impulse being sent through a delay,
-which then, through a feedback loop, creates a sound with a frequency given by
-1/(the delay time), which often sounds like a string pluck. There's usually a
-filter in the feedback loop of the delay, which is the coef argument of Pluck.
-It's pretty important to the string sound. However, it takes math to get the
-pitch right when there's any filter in the feedback loop, and I don't really
-like the typical Pluck.ar sound anyways.
-
-So, I rebuilt a simpler version of Pluck! The biggest difference aside from the
-filter being after the delay line, instead of in a feedback loop, is the initial
-pulse I used. Using a sharp impulse produces a saw-like sound, but the initial
-shape I made looks a bit like a trapezoid, for a less "buzzy" sound. The shape
-of it varies with the impulse Att, Sus, Dec, and Hold parameters; if one is
-bigger, that section of the shape lasts for a longer percentage of the waveform.
-
-Stethoscope.new is helpful when playing around with the shape.
-
-I also added a simple compressor, because of the apparent volume level changes
-different impulse shapes can cause. If you don't want it, just set ratio to 1.
-
-By Josh Mitchell June 2020
-*/
-
 SynthDef("ksBass", {
     arg
 	// Standard Values
@@ -908,16 +750,7 @@ metadata: (
 // noQuarterBass
 
 
-/*
-By Eric Sluyter
-Retrieved from https://sccode.org/1-4YY and
-https://sound.stackexchange.com/questions/35138/help-me-make-a-patch-for-this-bass-stab-pluck
 
-Slightly reformatted by Bruno Ruviaro November 2019.
-
-from Eric:
-"You could definitely use any number of hardware synths or plugins to do the same thing. General method I used, create a "pluck" sound with Karplus-Strong synthesis, and combine with a triangle wave, sine wave, and sub sine (sine wave at 1/2 the frequency). I also added a "click" at the beginning to give a little more punch. Then used enveloped resonant low pass filters to give it that synthy twang, and applied a little distortion to give it some color."
-*/
 
 SynthDef("noQuarter", {
 	arg
@@ -1000,18 +833,7 @@ metadata: (
 
 // rubberBandBass
 
-/*
-A silly little sound from my ongoing quest to make Pluck sound a little bit
-less like Pluck. Here, the sound going in isn't a normal short impulse, but
-a sine wave that gets quickly swept from one frequency down (or up!) to
-another one. The idea comes from some percussion and modal synthesis
-experiments I've done, and I wondered what this same technique would do to
-Pluck. Turns out, it sounds kinda like a cartoony rubber band! So, I added a
-little bit of pitch bend at the beginning of the note, controlled by bendTime
-and bendMultiple, and called it a day.
 
-By Josh Mitchell July 2020.
-*/
 
 SynthDef(\rubberBand, {
 	arg
@@ -1078,13 +900,7 @@ SynthDef("plucking", {arg out = 0, amp = 0.1, freq = 440, decay = 5, coef = 0.1;
 // subBass2
 
 
-/*
-A sub Bass based on octave-down guitar/bass effects from the 80s or so.
-This version changes where on the input wave switching happens,
-meaning the sub octave is more distorted and gritty than subBass1.
 
-Josh Mitchell, 8/19.
-*/
 
 SynthDef(\subBass2, {
     arg
@@ -1137,23 +953,8 @@ metadata: (
 
 // FMRhodes1
 
-/*
-Retrieved from: http://sccode.org/1-522
 
-FM Rhodes Synthesizer
 
-by Nathan Ho (snappizz)
-
-Native SuperCollider port of STK's Rhodey. This should be preferred over the StkInst version because:
-
-- It uses much less CPU.
-- It is easier to modify.
-- It doesn't require sc3-plugins or a correct setting of StkGlobals.
-- It's beginner-friendly because it uses only basic UGens: SinOsc, EnvGen, Mix, Pan2, Out.
-
-Modified by Josh Mitchell and Bruno Ruviaro in July 2019.
-
-*/
 
 SynthDef(\FMRhodes1, {
     arg
@@ -1192,17 +993,7 @@ metadata: (
 
 // cs80leadMH
 
-/* Recieved from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/cs80lead_mh.scd
 
-Vangelis/Blade Runner lead sound, based on tutorial by meastempo @ http://www.youtube.com/watch?v=Fne0oIEv-WI
-
-Original by Mike Hairston
-
-Pbindef notes copied from https://alijamieson.co.uk/2016/01/08/replicating-blade-runner-soundtrack
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("cs80leadMH", {
 	arg
@@ -1247,14 +1038,6 @@ metadata: (
 
 // Harpsichord2
 
-/* Retrieved from
-http://sccode.org/1-5aD
-
-Harpsichord based on Pluck Ugen
-Original by Zé Craum
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\harpsichord2, {
 	arg
@@ -1310,15 +1093,7 @@ metadata: (
 
 // Ping
 
-/* Received from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/ping_mh.scd
 
-Note from the author:
-
-Your basic percussive synth instrument, a good default sound for testing patterns, etc.
-
-Modified By Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\ping_mh,{
 
@@ -1343,16 +1118,6 @@ metadata: (
 
 // vintage synth
 
-/* Retrieved from
-http://sccode.org/1-5aD
-Original by Zé Craum
-
-Crude simulation of old sinusoidal generators - with random vibrato and a high noise floor.
-
-50hz mains hum emulation and slightly distorted sine (a clipped triangle wave) added by Josh Mitchell.
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\vintageSine, {
 	arg
@@ -1400,32 +1165,7 @@ SynthDef("noisy", {arg out = 0, freq = 440, amp = 0.2, pan = 0.5;
 }).add;
 
 // Decimator
-/*
-This is a synthDef that's inspired by (and tries to replicate) the Decimator quark.
 
-The decimator quark allows you to change the sample rate and bit depth of a signal,
-independently of the sample rate and bit depth supercollider is currently running at.
-These changes are done in this SynthDef through Latch.ar (a sample-and-hold) and .round,
-respectively.
-
-I've also added a pair of low pass filters at the beginning and end of these sections,
-as a very basic simulation of an analog-to-digital-to-analog converter. The filters can
-be switched on or off (listen to the demo), and they're currently set to half of the new
-sample rate (the nyquist frequency). This is because, looking at the frequency domain,
-sounds above the nyquist frequency get mirrored around it. Therefore, filtering out the
-stuff above the nyquist frequency makes the resulting sound a bit cleaner.
-
-Funnily enough, because of the weird things that happen above the nyquist frequency, my
-sample rate clock is only able to go up to the nyquist frequency related to supercollider's
-sampling rate without itself being aliased. I set a limit on my decimator's sample rate
-because of this, but you can remove it if you want.
-
-Lastly, the preamp control pushes the input signal above a hard clipping threshold to
-simulate a signal that's too loud going into an adc. If you don't want this effect, set
-the preamp control to 1.
-
-By Josh Mitchell June 2020
-*/
 
 SynthDef("decimator", {
     arg
@@ -1543,7 +1283,7 @@ SynthDef(\grainbuf, {
 
 }).add;
 
-/////////////////////////  Sintes para bufferes //////////
+/////////////////////////   buffer //////////
 
 SynthDef(\bufsynth, {
 	var sig, env;
@@ -1564,27 +1304,52 @@ SynthDef(\pbufm,
 		sig = sig * amp;
 		Out.ar(out,Pan2.ar(sig,pan));
 }).add;
+
 SynthDef(\pbufs,
 	{arg out = 0, buf = 0, rate = 1, amp = 1, pan = 0, pos = 0, rel=15;
 		var sig,env ;
-		sig = Mix.ar(PlayBuf.ar(1,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
+		sig = Mix.ar(PlayBuf.ar(2,buf,BufRateScale.ir(buf) * rate,1,BufDur.kr(buf)*pos*44100,doneAction:2));
 		env = EnvGen.ar(Env.linen(0.0,rel,0),doneAction:2);
 		sig = sig * env;
 		sig = sig * amp;
 		Out.ar(out,Pan2.ar(sig,pan));
 }).add;
 
+ SynthDef(\buf, {
+        arg out = 0, bufnum;
+        var sig,env;
+		env = Env(
+			levels:[0,1,1,0],
+			times:[1,1,0.5],
+			curve:-7
+	).ar(2);
+
+        sig = PlayBuf.ar(1, \buf.ir(0),\rate.ir(1), loop: 1);
+	sig = Pan2.ar(sig,\pos.ir(0.0));
+        Out.ar(out, sig);
+    }).add;
+
+/// buffer
+
+SynthDef(\buffer, {
+  arg bufnum, start = 0, end = 16, mul = 0.1, rate = 1;
+  var sig, env, duration;
+
+  duration = (end - start) * BufDur.kr(bufnum) * rate.reciprocal;
+  env = Env.linen(0.01, duration - 0.02, 0.01, mul).ar(2);
+
+  sig = PlayBuf.ar(1, bufnum, rate * BufRateScale.kr(bufnum), startPos: start * BufFrames.kr(bufnum));
+
+  sig = sig * env;
+  sig = Pan2.ar(sig,\pos.ir(0));
+	Out.ar(0, sig);
+}).add;
+
 ///////////////////////// Drones /////////// ///////////////////////////////////////////
 
-
-
-// FUENTE: https://recarteblog.wordpress.com/
-//droneFM01
-
-
 SynthDef(\droneFM, {
-	arg f1Freq=0.1, f2Freq=1.1, f3Freq=2.2, nFreq=440, m1Ratio=1, m2Ratio=2, m3Ratio=3,
-	amp=0.1, dur=55, ampM=0.84 , pan=0;
+	arg f1Freq=0.1, f2Freq=1.1, f3Freq=2.2, nFreq=440, m1Ratio=1, m2Ratio=2, m3Ratio=3, amp=0.1, dur=55, ampM=0.84 , pan=0;
+
 	var sig, car1, mod1, car2, mod2, car3, mod3, env, index;
 	index = LFNoise1.kr(0.2).range(2, 12);
 	env = EnvGen.kr(Env.new([0, 0.70, 0.70, 0], [dur*0.333, dur*0.333, dur*0.333]), doneAction:2);
@@ -1719,15 +1484,6 @@ SynthDef(\pad_ho, {
 // apadMH
 
 
-/*Retrieved from
-https://github.com/supercollider-quarks/SynthDefPool/blob/master/pool/apad_mh.scd
-
-"A simple sustained sound with vibrato" --Mike Hairston
-
-FreeVerb.ar added by Josh Mitchell.
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\apadMH, {
 	arg
@@ -1760,14 +1516,7 @@ metadata:(
 
 // feedbackPad1
 
-/*
-A pad SynthDef that generates tons of dense harmonic content simply by feeding a
-sine wave's output back into its phase input. It's almost exactly what SinOscFB does,
-only with a user-controlled delay time between when the output of the sine wave is
-measured and when that gets fed back into the phase argument.
 
-By Josh Mitchell July 2020.
-*/
 
 SynthDef(\feedbackPad1, {
 	arg out = 0, amp = 1, gate = 1, freq = 75, pan = 0,
@@ -1842,31 +1591,7 @@ metadata: (
 
 // feedbackPad3
 
-/*
-There's an inherent delay that's large enough to matter any time you use LocalIn
-and LocalOut for feedback, which I've forgotten about and then been reminded of
-by unexpected noises quite a few times. Rather than get annoyed by this, I tried
-gaining inspiration from it. For this SynthDef, I leaned into the discrete nature
-of digital audio that causes those effects a bit more. This time,the feedback is
-first downsampled by Latch.ar, at a frequency of sampleRate, then scaled and
-rounded to a number of notes, all a specific number of semitones apart. This gets
-put back into the frequency argument of the initial triangle wave, so that it's
-generating an arpeggio from itself.   Whoa, that's deep.
 
-The notes control is the number of notes in the arpeggio aside from the fundamental,
-and if it's negative or not a whole number, it gets rounded into a positive whole
-number. Interval is the equal distance between each note in semitones, but this
-doesn't need to be a whole number.
-
-After the feedback loop, the sound goes through some reverb to blend things together,
-then a bit of filtering. First there's an HPF fixed at the fundamental frequency to
-cut low frequency noise and slightly emphasise the fundamental. If you turn up the
-resonance much more than where it's at, it can get ugly. Next, there's a few LPFs
-that make a constant-enough dB/oct slope to take out some more high frequencies from
-the sound.
-
-By Josh Mitchell July 2020.
-*/
 
 SynthDef(\feedbackPad3, {
 	arg
@@ -1941,31 +1666,7 @@ metadata: (
 
 // superSaw
 
-/*
-This SynthDef is loosely based on the famous "supersaw" from the Roland JP-80x0
-synths. The supersaw sound is very common in 2000s-or-so EDM, and in the case of
-the Roland supersaw, it's built around 7 detuned saw waves with (as far as I know)
-randomly determined phases. Just like in most other supersaws, you can choose how
-detuned the saws are, where abs(freq - (detuneRatio * freq)) is the max detuning
-in hertz. Here, detuneRatio = 1 gives no detuning.
 
-This SynthDef isn't an exact copy of the Roland supersaw, but it is arguably a lot
-more flexible, a superdupersaw, if you will. First of all, it allows you to select
-any number of saws from 1 to 100, not just 7, using numOscs. Second, it lets you
-determine the stereo spread of these saws with the spread control, and third, it
-replaces Roland's blend control between a fundamental saw and its six detuned copies
-with a detuneFade control. When detuneFade is 0, all copies have the same volume,
-and as it gets higher the most detuned saws fade out more and more, for a more
-natural sound (in my opinion).
-
-This SynthDef also has the same envelope filter as midSideSaw.scd, that makes the
-sound just a bit grittier. The .softclip after the filter is to vaguely emulate
-certain filter circuits that, by nature of their design, distort a signal a tiny
-bit as they filter it. If you don't want this, just set the preamp to below 1 but
-above 0, as the distortion kicks in at around preamp = 1.
-
-By Josh Mitchell August 2020
-*/
 
 SynthDef(\superSaw, {
 	arg
@@ -2074,25 +1775,7 @@ metadata: (
 // abstractDrum
 
 
-/*
-This is a SynthDef cobbled together from some other modal percussion SynthDefs
-I've worked on recently. The frequencies come from a model for a square-shaped
-membrane clamped at the edges (see squareDrum for more on that). However, for
-the amplitudes and decay times, some pieces of a model for a plucked string get
-added in. That's why it's an abstract drum, it's a terrifying jumble of shapes
-just like abstract art!
 
-Position (where on the "string" from 0 to 1 at either end it's plucked) and
-decCoef determine the timbre of each note, along with hiFreqSus, which makes
-the sound's high frequencies sustain longer as it increases from 0. At really
-high values, all the values in decArray are essentially the same. This makes
-the sound seem more metallic in a way that reminds me of fm synthesis.
-
-As you can see from the demo, there's tons of different sounds you can get out
-of changing these three values!
-
-By Josh Mitchell July 2020.
-*/
 
 SynthDef(\abstractDrum, {
 	arg
@@ -2167,38 +1850,7 @@ metadata: (
 
 // frameDrum
 
-/*
-Frame drums are one of the world's oldest instruments, if not THE oldest. Tons of
-different kinds of frame drums show up around the world, and they're pretty simple
-in terms of what they're made of. They consist of a (usually) circular membrane, held
-tight by a thin frame. Sometimes they have jingly-janglies on them (like a tambourine,
-which is a type of frame drum), but this one doesn't.
 
-This SynthDef is literally just a modal model for a vibrating circular membrane, and it
-gets very close to the sounds of some frame drums. The massive list of numbers in
-freqArray just comes from MATLAB's solutions to bessel functions, which describe how fast
-a circle wobbles when you hit it. It's harder to model the amplitudes of a circular
-membrane, so I just made a rough estimate for those, based on the nodes for each mode,
-where the amplitude of that mode will always be 0. The nodes look like a superposition
-of a number of rings on the circle and a number of diameter-slices through the circle,
-depending on the number of the mode.
-
-Using that information, it's possible to get a rough estimate of how the timbre of the
-drum changes depending on how far from the center of the circle you hit it. This is
-controlled by position, where 0 is the center of the drum and 1 is the edge. This is
-very key to making the drum sound more realistic in my demo.
-
-On a real drum, the fundamental isn't usually the first frequency mode. This is because
-the shape of the first mode causes it to decay faster than the others, so it's not as
-noticeable. I've seen the sound from the first mode referred to as a "thump", so I added
-thumpAmp and thumpDec to provide some control over this sound.
-
-Another thing in this SynthDef is exBlend, which blends from an impulse at -1 to a short
-burst of brown noise at 1. Mixing the two together sounds more like a hand hitting the
-drum in my opinion, but that's pretty subjective. Play around with it!
-
-By Josh Mitchell, July 2020
-*/
 
 SynthDef(\frameDrum, {
 	arg
@@ -2332,13 +1984,6 @@ metadata: (
 
 // Marimba
 
-/*
-This SynthDef uses BPF in a manner similar to DynKlank.
-BPF gets hit with an impulse (Saw.ar(0)), and outputs a sine wave
-with a sharp attack, and a decay and amplitude both determined by rq.
-
-Modified by Bruno Ruviaro and Josh Mitchell July 2019 and June 2020.
-*/
 
 SynthDef(\marimba1, {
 	arg
@@ -2378,31 +2023,7 @@ metadata: (
 
 // metalPlate
 
-/*
-This SynthDef is a modal model for a rectangular plate held fixed at all edges,
-or "clamped." I think it sounds very metallic in general, so it'd probably make
-a nice strange cymbal.
 
-The timbre of the plate is mostly determined by ratio and decCoef. A higher value
-for decCoef makes the decay times of longer notes shorter, so you don't hear them
-as well beyond the initial attack of the note. Meanwhile, ratio controlls the
-relative shape of the rectangular plate, from narrow near 0 to square at 1. It's
-called ratio because it's the ratio of the short side to the long one. Values of
-ratio greater than 1 are probably okay, but they could be very out of tune or have
-mangled low notes. Changing ratio from note to note gives an FM-like effect.
-
-Where on the plate it's hit is determined by xpos and ypos, using the same 1d
-"position" argument in two different dimensions. As far as I can tell, xpos is
-along the short side and ypos is along the long side.
-
-Finally, I added thumpDec to control the decay time of a harmonic we percieve to
-be below the fundamental "pitch" of the plate, for a bit of controllable
-percussive emphasis. Finally, there's a cheaply done filter with a roughly
-constant, positive db/oct slope to emphasise higher harmonics a bit more, which
-helps highlight some of the metallic parts of the SynthDef.
-
-By Josh Mitchell August 2020.
-*/
 
 SynthDef(\metalPlate, {
 	arg
@@ -2471,28 +2092,7 @@ metadata: (
 
 // modalmarimba
 
-/*
-The work here is done through modal synthesis. The focus with modal synthesis is that any
-object will vibrate at certain frequencies (modes), with certain amplitudes, and certain
-decay times in a case where there's a damping force, for each of these modes. Here most of
-the math for those modes is done in arrays, then plugged into Klank, along with a short
-burst meant to simulate the object being hit.
 
-The title of this synthdef says it's a marimba, but it can also be used to simulate a lot
-of other idiophones, because it works on a very abstract model. Essentially, the harmonics
-of the SynthDef have been determined by the harmonics of a vibrating beam (say, a long
-rectangular prism), when it's hit by something. I find some of the math shortcuts pretty
-funny; this particular beam is totally ignoring gravity, for example.
-
-The decay coefficient (decCoef) does a lot to determine the timbre, position simulates
-the position on the beam in which it's hit (0.5 is the middle), and slope is the db/oct
-slope of a filter with a constant slope across the audio range.
-
-The solutions to the dynamic beam equation (look up Euler-Bernoulli beam theory if you're
-interested) were given by Nathan Ho, as well as some of the methods I used for amparray.
-
-By Josh Mitchell June 2020.
-*/
 
 SynthDef(\modalMarimba, {
 	arg
@@ -2555,11 +2155,7 @@ metadata: (
 // crotales
 
 
-/*
-Author Unknown
 
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef("pmCrotales", {
 	arg out = 0, freq = 261, tone = 3, att = 0, rel = 2, curve = -6, amp = 0.8, pan = 0, modLo = 5.25, modHi = 5.5;
@@ -2631,13 +2227,6 @@ SynthDef(\setPerc2,
 
 // strings
 
-/* Retrieved from
-http://sccode.org/1-5aD
-
-Original from SC Examples Folder some small pieces, Julian Rohrhuber, 2007
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\strings, {
 	arg
@@ -2671,20 +2260,6 @@ metadata: (
 // violin
 
 
-/* Retrieved from
-http://sccode.org/1-5aD
-
-by nicolaariutti
-http://sccode.org/1-5as
-
-Modifications from the original include:
-
--Added Vibrato.ar, to better simulate left hand movement alongside the pre-existing pwm.
--Changed ASR envelope to ADSR and "scratch" envelopes, to simulate the attack of a bow.
--Added filters, to simulate tone brightening from the bridge and back of the instrument.
-
-Modified by Bruno Ruviaro and Josh Mitchell 8/19.
-*/
 
 SynthDef(\violin, {
 	arg
@@ -2737,7 +2312,6 @@ metadata: (
 ////////// WINDS
 
 
-// Originally found at http://ecmc.rochester.edu/ecmc/docs/supercollider/scbook/Ch21_Interface_Investigations/ixi%20SC%20tutorial/ixi_SC_tutorial_10.html
 
 // waveguideFlute
 
@@ -2802,7 +2376,7 @@ SynthDef("waveguideFlute", { arg scl = 0.2, freq = 440, ipress = 0.9, ibreath = 
 
 // pluck
 
-// Originally found at http://ecmc.rochester.edu/ecmc/docs/supercollider/scbook/Ch21_Interface_Investigations/ixi%20SC%20tutorial/ixi_SC_tutorial_10.html
+
 
 SynthDef("waveguideFlute", { arg scl = 0.2, freq = 440, ipress = 0.9, ibreath = 0.09, ifeedbk1 = 0.4, ifeedbk2 = 0.4, dur = 1, gate = 1, amp = 2;
 
@@ -2863,50 +2437,7 @@ SynthDef("waveguideFlute", { arg scl = 0.2, freq = 440, ipress = 0.9, ibreath = 
 
 // modalElectricGuitar
 
-/*
-This SynthDef is especially cool to me, because working on effects for guitars is what ended
-up getting me into supercollider in the first place, and now in a continuation of that weird
-chain of events, I've come full circle to making a clean guitar sound in supercollider!
 
-This model can be broken into separate sections based on the parts of an electric guitar: It
-starts with a plucked string made using modal synthesis, and that goes into a single pickup.
-The pickup's position is modeled in the modal synthesis portion, and the electronic components
-of the pickup (as well as the volume and tone controls) are modeled afterwards with filters.
-
-The frequencies of each mode on the vibrating guitar string are determined by a standard stiff
-string model in freqArray, where 0.00001 is a constant stretching these frequencies a tiny bit
-from the harmonic series. Similarly, the decay times of each mode are found by decArray, where
-decayCoef and dampCoef (which is best left low) control the apparent brightness of each note.
-
-In ampArray, the first line works like an anti-aliasing filter, and the second line models the
-string being plucked at different locations, from the bridge at pickPos = 0 to the nut at
-pickPos = 1. Everything else inside ampArray, as well as the line after it, model a pickup
-with a certain width (parallel to the string) and position, once again from the brigde at
-pickupPos = 0 to the nut at pickupPos = 1. The pickup width is not, however, a ratio from 0 to
-1, but pickupWidth is instead measured in inches. This gets turned into a ratio by dividing it
-by the scale length of the guitar, which I set to 25.5 inches. This isn't a variable control
-because the main effects it has on a real guitar are on the ratios for each of the parameters
-I just mentioned, making it redundant to control. Lastly, the open frequency of a string (the
-note it's tuned to, as in e-a-d-g-b-e) has some effect when it interacts with the position of
-the pickup. Looking at the demo, you'll see I used that to write in what string a note is
-being played on.
-
-After all the complicated modal stuff, it's kind of interesting that the circuitry of a guitar
-from the pickups to any passive controls to a cable and output load can all be modeled pretty
-well with a resonant low pass filter. Rather than figure out a bunch of variables for the
-number of turns in the pickup windings, the pickup's capacitance, and everything else inside a
-guitar, all you get are the filter's resonant frequency and rq. There's another low pass filter
-for you that I labeled tone after a guitar control. I set it a bit lower than the resonant
-filter to roughly match an experimentally-determined filter curve I found.
-
-After that is a quick way of approximating muting a vibrating string with one hand. You can
-control when that happens with muteSus. If it's longer than rel, you'll let the string ring
-out. You'll see in the demo that I mute a string just before playing a new note on it, which
-helps with the realism, just like waving pickPos around slightly. What helps the most, however,
-is starting the demo with an add9 chord, as every guitar demo should start.
-
-By Josh Mitchell August 2020.
-*/
 
 SynthDef(\electricguitar, {
 	arg
@@ -3019,36 +2550,7 @@ metadata: (
 
 // distiorted guitar
 
-/*
-This is an attempt at making an electric guitar sound using Pluck.ar, as well as a couple
-delay-based comb filters which roughly simulate some of the effects of changing pickup
-placement and where on the string it's plucked. It still sounds a lot like Pluck and not
-very much like a guitar, so I stuck some distortion on it to hide my mistakes a bit. That's
-how guitar pedals work, right? (jk I think effects pedals are instruments in their own right)
 
-Starting with the pick, I used Hasher.ar to provide the same initial noise for each pick,
-but replacing that line with WhiteNoise.ar works fine. This then goes through the first
-comb filter, which mutes certain frequencies based on pickPos. This is the pick position
-from the bridge at 0 to the fret of the note being played at 1.
-
-Next up is Pluck.ar, which makes the string sound, as well as a way of "muting" that string.
-This is just a simple sustain-release envelope with a user-determined sustain time and a very
-short release time, controlling a low pass filter for a slightly more natural-sounding cutoff.
-I found it helpful in the demo, because two notes can't be played on the same string at once.
-Setting a note to mute just before the next on plays seems convincing enough.
-
-After this comes the pickup section. This guitar has only one pickup, and you can add more
-if you like. First is another comb filter to mimic how pickup placement cuts some frequencies
-and emphasizes others. Instead of pickupPos going from the bridge at 0 to the fretted note at
-1, it goes to the nut of the guitar at 1, meaning openStringFreq plays a very small role in
-the timbre of a note. Next is a resonant HPF and a steeper resonant LPF to mimic the frequency
-response of a generalized pickup.
-
-Finally, there's the distortion I mentioned above. It's got an HPF before the distortion and
-an LPF after it, as is generally common in a lot of guitar distortion pedals.
-
-By Josh Mitchell August 2020
-*/
 
 SynthDef(\distortedGuitar, {
 	arg
