@@ -2855,3 +2855,27 @@ SynthDef("sawSynth", { arg freq = 440, amp = 0.1, att = 0.1, rel = 2, lofreq = 1
     Out.ar(0, snd);
 }).add;
 )
+
+
+(
+SynthDef(\pulse, {
+	var sig, env, freq, cf;
+
+	freq = \freq.kr(100);
+	freq = freq * { Rand(-0.1, 0.1).midiratio }.dup(4);
+	cf = freq * \harm.ir(4);
+
+	sig = Pulse.ar(freq, \width.ir(0.5)).sum * 0.1;
+	sig = LPF.ar(sig, cf.clip(20, 20000));
+
+	env = EnvGen.kr(
+		Env.adsr(\atk.ir(0.02), \dec.ir(0.3), \slev.ir(0.3), \rel.ir(1)),
+		\gate.kr(1),
+		doneAction: 2
+	);
+
+	sig = Pan2.ar(sig, \pan.kr(0), \amp.kr(0.2));
+	sig = sig * env;
+	Out.ar(\out.kr(0), sig);
+}).add;
+)

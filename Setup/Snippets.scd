@@ -1,4 +1,36 @@
-DDWSnippets.put("textura1", "~t1 = Pbind(
+
+DDWSnippets.put("audios","b = (); b.china = PathName(\"/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/china/\").entries.collect({ |n| Buffer.readChannel(s,n.fullPath,channels:[0]);})");
+
+
+
+
+
+DDWSnippets.put("filters","
+~b1[1] = \\filter -> {|in|  in.clip};
+~b1[2] = \\filter -> {|in|  in *SinOsc.ar(150*[1,0.995])};
+~b1[3] = \\filter -> {|in|  LPF.ar(in,freq:600, mul:1, add:0)};
+~b1[4] = \\filter -> {|in|  CombL.ar(in,maxdelaytime:0.2,delaytime:0.07,decaytime:1)};
+~b1[5] = \\filter -> {|in|  RLPF.ar(in,freq:500,rq:0.07,mul:0.8)};
+~b1[6] = \\filter -> {|in|  MoogFF.ar(in,freq:500,gain:0.07,reset:0,mul:1,add:0)};
+~b1[7] = \\filter -> {|in|  GVerb.ar(in,roomsize:10,revtime:3,damping:0.5,inputbw:0.5,spread:15,drylevel:1,earlyreflevel:0.7, taillevel:0.5,maxroomsize:300,mul:1,add:0)};
+
+
+~b.set(\\wet1,0);
+~b.set(\\wet2, 0);
+~b.set(\\wet3, 0);
+~b.set(\\wet4, 0);
+~b.set(\\wet5,0);
+~b.set(\\wet6, 0);
+~b.set(\\wet7, 0);
+");
+
+
+
+
+
+
+
+DDWSnippets.put("textura1", "~t1[0] = Pbind(
 	\\instrument, \\bpfsaw,
 	\\dur, 5,
 	\\midinote, Pxrand([
@@ -20,7 +52,7 @@ DDWSnippets.put("textura1", "~t1 = Pbind(
 
 
 
-DDWSnippets.put("textura2","~t2 = Pbind(
+DDWSnippets.put("textura2","~t2[0] = Pbind(
 	\\instrument, \\droneFM,,
 	\\dur, 6,
 	\\nFreq, Pwhite([65.41,82.41,998],[65.41,82.41,998]-12,inf),
@@ -34,7 +66,7 @@ DDWSnippets.put("textura2","~t2 = Pbind(
      \ampM,0.85
 
 )");
-DDWSnippets.put("textura3", "~t3 = Pbind(
+DDWSnippets.put("textura3", "~t3[0] = Pbind(
 	\\instrument, \\simpledron,
 	\\dur, 6,
 	\\amp, -20.dbamp,
@@ -42,7 +74,7 @@ DDWSnippets.put("textura3", "~t3 = Pbind(
 	\\freq , Pwhite([80,200,220],[80,240,250],inf),
 )");
 
-DDWSnippets.put("textura4", "~t4 = Pbind(
+DDWSnippets.put("textura4", "~t4[0] = Pbind(
 	\\instrument, \\pad_ho,
 	\\dur,6,
 	\\freq, Pxrand([[165,167],[69,70], [440,441],[1000,1100]].stutter(2),inf),
@@ -53,7 +85,7 @@ DDWSnippets.put("textura4", "~t4 = Pbind(
 	\\amp,0.2,
 )");
 
-DDWSnippets.put("textura5"," ~t5 = Pbind(
+DDWSnippets.put("textura5"," ~t5[0] = Pbind(
 	\\instrument, \\feedbackPad1,
 	\\dur,10,
 	\\freq, Pxrand([[165,167],[69,70], [440,441],[1000,1100]].stutter(2),inf),
@@ -76,7 +108,7 @@ DDWSnippets.put("textura5"," ~t5 = Pbind(
 	\\delRel ,3.5,
 	\\gate, 1
 )");
-DDWSnippets.put("textura6"," ~t6 =  Pbind(
+DDWSnippets.put("textura6"," ~t6[0] =  Pbind(
 	\\instrument, \\chaosGlitch2,
 	\\amp, 0.7,
 	\\dur,1,
@@ -92,10 +124,10 @@ DDWSnippets.put("textura6"," ~t6 =  Pbind(
 
 
 
-DDWSnippets.put("ritmo1","~r1 = Pbind(
+DDWSnippets.put("ritmo1","~r1[0] = Pbind(
 		\\instrument, \\bufsynth,
 
-\\buf, Pxrand(d['glitch2'],inf),
+\\buf, Pxrand(d[\"glitch2\"],inf),
 		\\dur, 1/4,
 		\\rate, Pwhite(1.0,5.0,inf),
 		\\spos,0,
@@ -107,10 +139,10 @@ DDWSnippets.put("ritmo1","~r1 = Pbind(
 		\\pan, Prand([-1,0, 1],inf)
 
 )");
-DDWSnippets.put("ritmo2","~r2 = Pbind(
+DDWSnippets.put("ritmo2","~r2[0] = Pbind(
 		\\instrument, \\bufsynth,
 
-\\buf, Pxrand(d['pajaros'],inf),
+\\buf, Pxrand(d[\"pajaros\"],inf),
 		\\dur, 1/2,
 		\\rate, Pwhite(1.0,5.0,inf),
 		\\spos,0,
@@ -123,10 +155,10 @@ DDWSnippets.put("ritmo2","~r2 = Pbind(
 );
 
 
-DDWSnippets.put("ritmo3","~r3 =Pbind(
+DDWSnippets.put("ritmo3","~r3[0] =Pbind(
 		\\instrument, \\bufsynth,
 
-\\buf, Pxrand(d['shout'],inf),
+\\buf, Pxrand(d[\"shout\"],inf),
 		\\dur, 0.25,
 		\\rate, Pwhite(1.0,5.0,inf),
 		\\spos,0,
@@ -139,10 +171,10 @@ DDWSnippets.put("ritmo3","~r3 =Pbind(
 	);
 
 
-DDWSnippets.put("ritmo4","~r4 =Pbind(
+DDWSnippets.put("ritmo4","~r4[0] =Pbind(
 		\\instrument, \\bufsynth,
 
-\\buf, Pxrand(d['voces'],inf),
+\\buf, Pxrand(d[\"voces\"],inf),
 		\\dur, 1/4,
 		\\rate, Pwhite(0.8,1.5,inf),
 		\\spos,Pwhite(0.0,0.8,inf),
@@ -153,10 +185,10 @@ DDWSnippets.put("ritmo4","~r4 =Pbind(
 		\\cur,1,
         \\pan, Prand([-1,0, 1],inf)"
 );
-	DDWSnippets.put("ritmo5","~r5 =Pbind(
+	DDWSnippets.put("ritmo5","~r5[0] =Pbind(
 		\\instrument, \\bufsynth,
 
-\\buf, Pxrand(d['etnico'],inf),
+\\buf, Pxrand(d[\"etnico\"],inf),
 		\\dur, 2,
 		\\rate, Pwhite(0.8,1.5,inf),
 		\\spos,Pwhite(0.0,0.8,inf),
@@ -168,21 +200,20 @@ DDWSnippets.put("ritmo4","~r4 =Pbind(
         \\pan, Prand([-1,0, 1],inf)"
 );
 
-	DDWSnippets.put("ritmo6","~r6 = Pbind(
-		\\instrument, \\bufsynth,
-\\buf, Pxrand(d['agua'],inf),
-		\\dur, 1/4,
-		\\rate, Pwhite(0.8,1.5,inf),
-		\\spos,Pwhite(0.0,0.8,inf),
-		\\amp, 4.dbamp,
-		\\atk, 0.05,
-		\\sus, Pwhite(0.0,0.15),
-		\\rel, 0.5,
-		\\cur,-4,
-		\\pan, Prand([-1,0, 1],inf)"
-	);
+	DDWSnippets.put("ritmo6","~r6[0] = Pbind(
+	\\instrument, \\pulse,
+	\\dur, 0.2,
+	\\sustain, 0.2,
+	\\degree, Pseq([0, 1, 2, 3,5], inf),
+	\\db, -10,
+	\\atk, 0.01,
+	\\dec, 0.08,
+	\\slev, 0,
+	\\rel, 0,
 
-DDWSnippets.put("melodia1", "~m1 = Pbind(
+)");
+
+DDWSnippets.put("melodia1", "~m1[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\\scale, Scale.yu.tuning_(\just),
@@ -201,7 +232,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
 )");
 
 
-	DDWSnippets.put("melodia2"	,"~m2 = Pbind(
+	DDWSnippets.put("melodia2"	,"~m2[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\\scale, Scale.zhi.tuning_(\just),
@@ -221,7 +252,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
 
 
 
-	DDWSnippets.put("melodia3",	"~m3 = Pbind(
+	DDWSnippets.put("melodia3",	"~m3[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\\scale, Scale.gong.tuning_(\just),
@@ -240,7 +271,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
 )");
 
 
-		DDWSnippets.put("melodia4",	"~m4 = Pbind(
+		DDWSnippets.put("melodia4",	"~m4[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\\scale, Scale.chinese.tuning_(\just),
@@ -258,7 +289,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
     \\amp, 0.4,
 )");
 
-	DDWSnippets.put("melodia5",	"~m5 = Pbind(
+	DDWSnippets.put("melodia5",	"~m5[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\\scale, Scale.shang.tuning_(\just),
@@ -276,7 +307,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
     \\amp, 0.4,
 )");
 
-	DDWSnippets.put("melodia6","~m6 = Pbind(
+	DDWSnippets.put("melodia6","~m6[0] = Pbind(
 
 	\\instrument, \\plucking,
 	\scale, Scale.chromatic.tuning_(\just),
@@ -294,7 +325,7 @@ DDWSnippets.put("melodia1", "~m1 = Pbind(
 )");
 
 
-DDWSnippets.put("glitch1", "~g1 = Pbind(
+DDWSnippets.put("glitch1", "~g1[0] = Pbind(
 	\\instrument, \\chaosGlitch2,
 	\\dur, 1,
 	\\len, Pseq([1, 1.5, 1.75, 2]+10,inf),
@@ -305,7 +336,7 @@ DDWSnippets.put("glitch1", "~g1 = Pbind(
 	\\amp,0.1
 )");
 
-DDWSnippets.put("glitch2","~g2 = Pbind(
+DDWSnippets.put("glitch2","~g2[0] = Pbind(
 \\instrument, \\hasherTest,
 \\dur, Pxrand([2,5,7,9],inf),
 \\rate, Pfuncn({100.rand}, inf),
@@ -316,9 +347,9 @@ DDWSnippets.put("glitch2","~g2 = Pbind(
 \\amp, 0.2
 )");
 
-DDWSnippets.put("glitch3", "~g3 = Pbind(
+DDWSnippets.put("glitch3", "~g3[0] = Pbind(
 	\\instrument, \\bufsynth,
-\\buf, Pxrand(d['glitch2'], inf),
+\\buf, Pxrand(d[\"glitch2\"], inf),
 	\\dur, 1/2,
 	\\rate, Pwhite(0.5,1.5,inf),
 	\\amp, Pwhite(0.4,1.0,inf),
@@ -326,9 +357,9 @@ DDWSnippets.put("glitch3", "~g3 = Pbind(
 	\\sus, 0.04,
 	\\rel, 0.005
 )");
-	DDWSnippets.put("glitch4","~g4 = Pbind(
+	DDWSnippets.put("glitch4","~g4[0] = Pbind(
 	\\instrument, \\pbufs,
-\\buf, Pxrand(d['rim'], inf),
+\\buf, Pxrand(d[\"rim\"], inf),
 	\\dur, 1/2,
 	\\rate, Pwhite(0.5,1.5,inf),
 	\\amp, Pwhite(0.4,1.0,inf),
@@ -336,9 +367,9 @@ DDWSnippets.put("glitch3", "~g3 = Pbind(
 	\\sus, 0.4,
 	\\rel, 0.05
 )");
-	DDWSnippets.put("glitch5","~g5 = Pbind(
+	DDWSnippets.put("glitch5","~g5[0] = Pbind(
 	\\instrument, \\pbufs,
-\\buf, Pxrand(d['pajaros'], inf),
+\\buf, Pxrand(d[\"pajaros\"], inf),
 	\\dur, 1/2,
 	\\rate, Pwhite(0.5,1.5,inf),
 	\\amp, Pwhite(0.4,1.0,inf),
@@ -346,9 +377,9 @@ DDWSnippets.put("glitch3", "~g3 = Pbind(
 	\\sus, 2,
 	\\rel, 0.5
 )");
-	DDWSnippets.put("glitch6","~g6 = Pbind(
+	DDWSnippets.put("glitch6","~g6[0] = Pbind(
 	\\instrument, \\pbufs,
-\\buf, Pxrand(d['orquesta'], inf),
+\\buf, Pxrand(d[\"orquesta\"], inf),
 	\\dur, 1/2,
 	\\rate, Pwhite(0.5,1.5,inf),
 	\\amp, Pwhite(0.1,4.0,inf),
@@ -359,7 +390,7 @@ DDWSnippets.put("glitch3", "~g3 = Pbind(
 )");
 
 
-DDWSnippets.put("bass1", "~b1 = Pbind(
+DDWSnippets.put("bass1", "~b1[0] = Pbind(
 	\\instrument, \\blip1,
 	\\scale,  Scale.yu,
 	\\degree, Pn(Pshuf([0,3,5,7,10],4),inf),
@@ -374,7 +405,7 @@ DDWSnippets.put("bass1", "~b1 = Pbind(
 	\\pan,0
 )");
 
-DDWSnippets.put("bass2", "~b2=  Pbind(
+DDWSnippets.put("bass2", "~b2[0]=  Pbind(
 	\\instrument, \\ksBass,
 	\\scale,  Scale.zhi,
 	\\degree, Pn(Pshuf([0,2,5,7,9,7,5,2],4),inf),
@@ -388,7 +419,7 @@ DDWSnippets.put("bass2", "~b2=  Pbind(
 	\\curve,-6,
 	\\pan,0
 )");
-	DDWSnippets.put("bass3","~b3 = Pbind(
+	DDWSnippets.put("bass3","~b3[0] = Pbind(
 	\\instrument, \\bass,
 	\\freq, 70 * Pseq([0,1].midiratio,inf).stutter(16) * Pseq([1,2],inf).stutter(64),
 	\\fmrange, Pseq([0.5,1,1.5],inf),
@@ -413,7 +444,7 @@ DDWSnippets.put("bass2", "~b2=  Pbind(
 	\\isRest, false,
 )");
 
-	DDWSnippets.put("bass4","~b4 =  Pbind(
+DDWSnippets.put("bass4","~b4[0] =  Pbind(
 	\\instrument, \\subBass2,
 	\\scale,  Scale.chinese,
 	\\degree, Pn(Pshuf([0,4,6,7,11],4),inf),
@@ -427,8 +458,8 @@ DDWSnippets.put("bass2", "~b2=  Pbind(
 	\\curve,-6,
 	\\pan,0
 )");
-	DDWSnippets.put("bass5"," ~b5 = Pbind(
-	\\instrument, \subBass2,
+	DDWSnippets.put("bass5"," ~b5[0] = Pbind(
+	\\instrument, \\subBass2,
 	\\scale,  Scale.shang,
 	\\degree, Pn(Pshuf([[0,2],[5,7],[10,2],[5,7]],4),inf),
 	\\octave, [2,3,4],
@@ -441,7 +472,7 @@ DDWSnippets.put("bass2", "~b2=  Pbind(
 	\\curve,-6,
 	\\pan,0
 )");
-	DDWSnippets.put("bass6","~b6 =Pbind(
+	DDWSnippets.put("bass6","~b6[0] =Pbind(
 	\\instrument, \\subBass2,
 	\\scale, Scale.minorPentatonic,
 	\\degree, Prand([0, [3,11], 7, [5,13],  10 ],inf),
