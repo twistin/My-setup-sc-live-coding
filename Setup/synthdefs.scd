@@ -2854,7 +2854,7 @@ SynthDef("sawSynth", { arg freq = 440, amp = 0.1, att = 0.1, rel = 2, lofreq = 1
     snd = Splay.ar(snd);
     Out.ar(0, snd);
 }).add;
-)
+);
 
 
 (
