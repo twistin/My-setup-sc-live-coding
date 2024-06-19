@@ -1318,13 +1318,11 @@ SynthDef(\pbufs,
  SynthDef(\buf, {
         arg out = 0, bufnum;
         var sig,env;
-		env = Env(
-			levels:[0,1,1,0],
-			times:[1,1,0.5],
-			curve:-7
+		env = Env.linen(
+			\atk.ir(1),\sus.ir(1),\rel.ir(1),1,\curve.ir(-6)
 	).ar(2);
 
-        sig = PlayBuf.ar(1, \buf.ir(0),\rate.ir(1), loop: 1);
+        sig = PlayBuf.ar(1, \buf.ir(0),\rate.ir(1),1,\spos.ir(0) ,loop: 1);
 	sig = Pan2.ar(sig,\pos.ir(0.0));
         Out.ar(out, sig);
     }).add;
