@@ -1315,6 +1315,17 @@ SynthDef(\pbufs,
 		Out.ar(out,Pan2.ar(sig,pan));
 }).add;
 
+SynthDef(\bufchina, { |out, gate = 1, bufnum, startSec, rate = 1, amp = 0.1, pan = 0|
+	var sig = PlayBuf.ar(
+		1, bufnum,
+		rate * BufRateScale.kr(bufnum),
+		startPos: startSec * BufSampleRate.kr(bufnum)
+	);
+	var eg = EnvGen.ar(Env.asr(0.005, 1, 0.005, \lin), gate, doneAction: 2);
+	Out.ar(out, Pan2.ar(sig * (eg * amp), pan))
+}).add;
+
+
  SynthDef(\buf, {
         arg out = 0, bufnum;
         var sig,env;
@@ -1471,7 +1482,7 @@ SynthDef(\pad_ho, {
 	sig = Saw.ar(\freq.kr(440)*({LFNoise2.kr(8) } ! 16 * 0.1).midiratio);
 	sig = DelayC.ar(sig, 0.01, {Rand(0,0.01) } ! sig.size);
 	sig = Splay.ar(sig);
-	sig = sig * Env.asr(3,1,3).ar(Done.freeSelf, \gate.kr(1));
+	sig = sig * Env.asr(\atk.ir(1),\sus.ir(1),\rel.ir(3)).ar(Done.freeSelf, \gate.kr(1));
 	sig = sig *\amp.kr(-20.dbamp);
 	sig = sig!2;
 	Out.ar(\out.kr(0), sig);
