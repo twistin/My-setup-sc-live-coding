@@ -32,7 +32,7 @@ supercollider
 
 
     // Definir SynthDef con PlayBuf
-    SynthDef(\buf, {
+    SynthDef(\bufd, {
         arg out = 0, bufnum;
         var sig,env;
 		env = Env(
@@ -41,7 +41,7 @@ supercollider
 			curve:-7
 	).ar(2);
 
-        sig = PlayBuf.ar(1, bufnum,\rate.ir(1), loop: 1);
+	sig = PlayBuf.ar(1, bufnum:d["china"][0],\rate.ir(1), loop: 1);
 	sig = Pan2.ar(sig,\pos.ir(0.0));
         Out.ar(out, sig);
     }).add;
@@ -54,11 +54,11 @@ supercollider
 
     // Reproducir en bucle con Pbind
 
-~z = Synth(\pbufs, [\buf,d["china"][2] ])
+Synth(\pbufs, [\buf,d["china"][1] ])
      ~z =Pbind(
-        \instrument, \pbufm,
-		\buf,  d["china"][0],
-        //\bufnum,  d["china"][0].bufnum,
+        \instrument, \buf,
+		\buf,  d["china"][9],
+        \bufnum,  d["china"][0].bufnum,
        \dur, 4,
         \legato, 1,
 	\rate,1, //Pwhite(0.5,1.5,inf),
