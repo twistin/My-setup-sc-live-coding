@@ -1484,7 +1484,7 @@ SynthDef(\pad_ho, {
 	sig = Saw.ar(\freq.kr(440)*({LFNoise2.kr(8) } ! 16 * 0.1).midiratio);
 	sig = DelayC.ar(sig, 0.01, {Rand(0,0.01) } ! sig.size);
 	sig = Splay.ar(sig);
-	sig = sig * Env.asr(3,1,3).ar(Done.freeSelf, \gate.kr(1));
+	sig = sig * Env.asr(\atk.ir(1),\sus.ir(1),\rel.ir(3)).ar(Done.freeSelf, \gate.kr(1));
 	sig = sig *\amp.kr(-20.dbamp);
 	sig = sig!2;
 	Out.ar(\out.kr(0), sig);

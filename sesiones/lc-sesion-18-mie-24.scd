@@ -1,32 +1,57 @@
 ("../Setup/Setup.scd").loadRelative;
 
-
-{SinOsc.ar(220)}.play
 (
-SynthDef(\bufseg1, { |out, gate = 1, bufnum, startSec, rate = 1, amp = 0.1, pan = 0|
-	var sig = PlayBuf.ar(
-		1, bufnum,
-		rate * BufRateScale.kr(bufnum),
-		startPos: startSec * BufSampleRate.kr(bufnum)
-	);
-	var eg = EnvGen.ar(Env.asr(0.005, 1, 0.005, \lin), gate, doneAction: 2);
-	Out.ar(out, Pan2.ar(sig * (eg * amp), pan))
-}).add;
+~mix.ar;
+(
+~verb = {
+	XFade2.ar(
+		LPF.ar(
+			GVerb.ar(
+				~mix.ar(1), 80,8, maxroomsize:1000),
+			8500
+		),
+		~mix, \pan.kr(0,0.5),\rel.kr(0.15)
+	)
+};
+~verb.play;
+)
 )
 
-b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
-b.play
+
 (
-p = Pbind(
-	\instrument, \bufseg1,
-	\bufnum, b,
-	\startSec, Pwhite(0,b.duration * 0.6, inf),
-	\rate, 1,
-	\dur, Pexprand(0.2, 0.9, inf),
-	\legato, 1
-).play;
+~a = Pbind(
+	\instrument, \simpledron,
+	\dur, 6,
+	\amp, -20.dbamp,
+	\rq, 1,
+
+	\freq , Pwhite([80,200,220],[80,240,250],inf),
+
+)
+)
+~mix = {~t4}
+~a.release(4)
+~a.stop(2)
+
+
+Synth(\chaosGlitch2)
+~t4.pause
+~mix = { }
+~t4 = Pbind(
+	\instrument, \chaosGlitch2,
+	\amp, 0.7,
+	\dur,5,
+	\len,5,
+	\fundFreq , [40,80].choose,
+	\henA , 2,
+	\henB , 0.4,
+	\t , 1,
+	\gate, 1,
 )
 
-p.stop;
 
-Synth(\bufseg1)
+
+
+
+
+
