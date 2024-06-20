@@ -1354,6 +1354,18 @@ SynthDef(\buffer, {
 	Out.ar(0, sig);
 }).add;
 
+
+SynthDef(\bufseg1, { |out, gate = 1, bufnum, startSec, rate = 1, amp = 1, pan = 0|
+	var sig = PlayBuf.ar(
+		1, bufnum,
+		rate * BufRateScale.kr(bufnum),
+		startPos: startSec * BufSampleRate.kr(bufnum)
+	);
+	var eg = EnvGen.ar(Env.asr(0.005, 1, 0.005, \lin), gate, doneAction: 2);
+	Out.ar(out, Pan2.ar(sig * (eg * amp), pan))
+}).add;
+
+
 ///////////////////////// Drones /////////// ///////////////////////////////////////////
 
 SynthDef(\droneFM, {

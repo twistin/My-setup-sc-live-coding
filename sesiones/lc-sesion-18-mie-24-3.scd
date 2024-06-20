@@ -21,7 +21,7 @@ b.play.numChannel
 	\bufnum, d["china"][2],
 	\startSec, Pwhite(0, b.duration * 0.6, inf),
 	\rate, 1,//Pxrand([0.3,0.8,1,2],inf),
-	\dur, Pexprand(2, 2.9, inf),
+	\dur, Pbjorklund2(3,8)/4, //Pexprand(2, 2.9, inf),
 	\legato, 1,
 	\amp, 1,
 	// 70% chance of being a rest
@@ -55,7 +55,7 @@ d["orquesta"][2].play
 ~b.set(\wet6, 0);
 ~p.set(\wet7, 0);
 ~g3=clear
-~mix = {~g3 + ~r6 + ~b6}
+~mix = {~g3 + ~r6 + ~b6+~p}
 
 ~g3.play;
 ~g3[0] = Pbind(
@@ -72,7 +72,7 @@ d["orquesta"][2].play
 ~r6.play
 ~r6[0] = Pbind(
 	\instrument, \pulse,
-	\dur, 1,
+	\dur, Pbjorklund2(3,8)/4,
 	\sustain, 0.2,
 	\degree, Pseq([0, 1, 2, 3,5], inf),
 	\db, -10,
@@ -112,7 +112,7 @@ d["k"][2].play
 	\scale, Scale.minorPentatonic,
 	\degree, Prand([0, [3,11], 7, [5,13],  10 ],inf),
 	\octave, [2,3,4],
-	\dur, Pseq([1], inf),
+	\dur, Pbjorklund2(3,8)/4, //Pseq([1], inf),
 	\amp, 0.09,
 	\level, 1.5,
 	\atk, 0,
@@ -122,4 +122,38 @@ d["k"][2].play
 	\pan,0
 )
 
-Synth(\buf)
+Pbjorklund2(3,8)/4
+
+
+(
+~mix.ar;
+(
+~verb = {
+	XFade2.ar(
+		LPF.ar(
+			GVerb.ar(
+				~mix.ar(1), 80,8, maxroomsize:1000),
+			8500
+		),
+		~mix, \pan.kr(0,0.5),\rel.kr(0.15)
+	)
+};
+~verb.play;
+)
+)
+
+~mix = {~piano1 + ~piano2 }
+
+~piano1.play
+~piano2.play
+
+(
+~piano1 = Pbind(\instrument,\bufseg1,
+	\buf,d["china"][2],
+	\dur,8,
+	\amp,1
+
+);
+~piano2 = Pbind(\instrument,\bufseg1,\buf,d["piano"][7],\dur,15,\amp,1,\rate,0.5);
+)
+d["piano"][8].play
