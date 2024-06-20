@@ -1,4 +1,4 @@
-("../Setup/Setup.scd").loadRelative;
+("../sesiones/ensayos/Setup/Setup.scd").loadRelative;
 t = TempoClock.default.tempo_(120/60); // Ajusta el tempo si es necesario
 s.options.sampleRate = 48100
 
@@ -110,7 +110,7 @@ p = ProxySpace(
 ~nz = {Hasher.ar(LFClipNoise.ar(\nFr.kr(2500),1,\add.kr(3)))!2};
 ~a.play; ~a.awake_(false);
 ~a =  {MoogFF.ar(Saw.ar(\freq.kr(5000)*[1,1.008], Decay.kr(Impulse.kr(\trig.kr(10)), ~nz *0.001)),18000,0).tanh * Env([0,1,1,0],[\atk.kr(0.002), \sus.kr(0.1),\rel.kr(0.05)]).ar(2)*\amp.kr(0.1)};
-~a.spawn;
+~b.spawn;
 
 ~b.play; ~b.awake;
 ~b = {\k.kr(0) + SinOscFB.ar(XLine.kr(\freq.kr(500)*[1, \mod.kr(0.98499)],\freq.kr * [1, \mod.kr], \d.kr(0.0005)),\fb.kr(0)).mean.tanh !2 * Env([0,1,1,0], [\atk.kr(0.005), \sus.kr(0),\rel.kr(0.3) + \d.kr]).kr(2) * \amp.kr(0.2) +(\k.kr * LPF.ar(BrownNoise.ar([0.3,0.31]),[5000,6500]) * Env.perc(0.02,\rel.kr * 0.9, \cur.kr(-5)).ar(0))}
@@ -163,7 +163,7 @@ p = ProxySpace(
 	};
 })
 
-~seq2.play
+~seq2.clear
 ~seq1.pause
 
 

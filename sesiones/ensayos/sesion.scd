@@ -14,20 +14,20 @@
 d.keys
  d["rio"][0].numChannel
 
-
+~v.play
 (
 ~v = Pbind(
 	\instrument, \pbufs,
-	\buf, Pxrand(d["orquesta"], inf),
-	\dur, 1/2,
+	\buf, d["orquesta"][5],
+	\dur, 4,
 	\rate, Pwhite(0.5,1.5,inf),
-	\amp, Pwhite(0.1,4.0,inf),
+	\amp, 0.8,//Pwhite(0.1,4.0,inf),
 	\atk, 2,
 	\sus, 2,
 	\rel, 0.5
 )
 )
-~v.stop
+~v.play
 
 ~mix = {~v}
 
