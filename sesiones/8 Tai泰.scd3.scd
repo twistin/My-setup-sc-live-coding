@@ -132,7 +132,7 @@ SynthDef(\paulstretchMono, { |out = 0, bufnum, envBufnum, pan = 0, stretch = 50,
 
 /////////////////////////////////////////////////////////
 
-~b1[1] = \filter -> {|in|  in.clip};
+~a[1] = \filter -> {|in|  in.clip};
 ~b1[2] = \filter -> {|in|  in *SinOsc.ar(150*[1,0.995])};
 ~b1[3] = \filter -> {|in|  LPF.ar(in,freq:600, mul:1, add:0)};
 ~b1[4] = \filter -> {|in|  CombL.ar(in,maxdelaytime:0.2,delaytime:0.07,decaytime:1)};

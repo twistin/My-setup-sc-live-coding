@@ -19,7 +19,6 @@ Synth(\FMRhodes1)
 	\degree, Pseq([0,3,5,7]+2,inf),
 	\dur, 0.25
 )
-
 ~a.play
 
 
@@ -49,8 +48,9 @@ Synth(\FMRhodes1)
 	\instrument, \FMRhodes1,
 	\scale, Scale.majorPentatonic,
 	 //\degree, Pseq((0..7) ++ (6..0) ++ [\rest], 1),
-	\degree, Pseq([0,3,5,7]-10,inf),
-	\dur, 1/2
+	\degree, Pseq([0,3,5,7,10,7,5]-10,inf),
+	\dur, 1/2,
+	\amp, 0.4
 )
 
 
@@ -71,12 +71,11 @@ l = Prewrite(0.25,
 	 //\degree, Pseq((0..7) ++ (6..0) ++ [\rest], 1),
 	\degree, Pseq([0,3,5,7],inf),
 	\dur, l,
-	\amp,1
+	\amp,0.3
 )
 )
+
 ~e.play
-
-
 //////////////////////// controles /////////////////////
 
             ///////////  reverb ///////////
@@ -100,33 +99,34 @@ l = Prewrite(0.25,
 
 
 ///////////////////////////////////////////////////////////
-
-~mix = {~a + ~b + ~c + ~d + ~e}
+~a +~b+ ~c+~d+~e
+~mix = { ~a +~b +~c +~d+~e}
 
 /////////////////////////////////////////////////////////
 ~a.play;
 ~b.play;
 ~c.play;
 ~d.play;
-~c.play;
+~e.play;
 
 ~a.pause;
 ~b.pause;
 ~c.pause;
 ~d.pause;
-~c.pause;
+~e.pause;
+
 ~a.resume;
 ~b.resume;
 ~c.resume;
 ~d.resume;
-~c.resume;
+~e.resume;
 
 
 
 
 
 ////////////////////////// Final //////////////////////////
-
+~off.play;
 (
 ~off = Tdef(\off,{
 	~a.stop;
@@ -136,10 +136,13 @@ l = Prewrite(0.25,
 	~c.stop;
 	4.wait;
 	~d.stop;
+	10.stop;
+		~e.stop;
 	10.stop
 
 })
 )
+
 ~mix= {}
 
 

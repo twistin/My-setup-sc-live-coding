@@ -1,3 +1,19 @@
+DDWSnippets.put("system-l","l = Prewrite(0.25,
+    (
+        0.25: #[0.25,0.25,0.25,0.5],
+        0.5: #[0.25,0.5,0.125,0.125,0.125,0.125],
+        0.125: #[0.375,0.125],
+        0.375: #[0.375,0.375,1],
+        1: #[0.75,0.25],
+        0.75: #[16]
+),60)");
+
+
+
+
+
+
+
 
 DDWSnippets.put("audios","b = (); b.china = PathName(\"/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/china/\").entries.collect({ |n| Buffer.readChannel(s,n.fullPath,channels:[0]);})");
 

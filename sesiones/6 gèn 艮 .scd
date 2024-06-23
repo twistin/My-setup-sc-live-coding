@@ -1,24 +1,24 @@
-
+"/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/china/"
 
 // tempo
 t = p.clock.tempo_(90/60);
 ////////
 ("../Setup/Setup.scd").loadRelative;
-
 // 艮 艮 艮 艮 艮 艮 艮 艮 QUINTA PIEZA:  gèn 艮 艮 艮 艮 艮 艮 艮 艮//
 
-b = (); b.china = PathName("/Users/sdcarr/Documents/GitHub/My-setup-sc-live-coding/samples/set1/china/").entries.collect({ |n| Buffer.readChannel(s,n.fullPath,channels:[0]);})
+b = (); b.china = PathName("/Users/sdcarr/Desktop/My-setup-sc-live-coding/samples/set1/china/").entries.collect({ |n| Buffer.readChannel(s,n.fullPath,channels:[0]);})
 
 
 ////////////////  1 //////////////////
 (
 ~a = Pbind(
 	\instrument, \bufseg1,
-	\bufnum, b.china[12],
-	\startSec, Pwhite(0, b.china[12].duration * 0.6, inf),
+	\bufnum, b.china[6],
+	\startSec, Pwhite(0, b.china[6].duration * 0.6, inf),
 	\rate, 1,
 	\dur, 20, //Pexprand(0.2, 0.9, inf),
-	\legato, 1
+	\legato, 1,
+	\amp,5
 );
 )
 b.china[6].play
@@ -32,11 +32,12 @@ b.china[6].play
 (
 ~b = Pbind(
 	\instrument, \bufseg1,
-	\bufnum, b.china[16],
-	\startSec, Pwhite(0, b.china[16].duration * 0.6, inf),
+	\bufnum, b.china[14],
+	\startSec, Pwhite(0, b.china[14].duration * 0.6, inf),
 	\rate, 1,
 	\dur, 20, //Pexprand(0.2, 0.9, inf),
-	\legato, 1
+	\legato, 1,
+	\amp,1
 );
 )
 ~b.play;
@@ -82,8 +83,8 @@ b.china[6].play
 
 
 ///////////////////////////////////////////////////////////
-
-~mix = {~p}
++ ~b+ ~c +~p
+~mix = {~a }
 
 /////////////////////////////////////////////////////////
 

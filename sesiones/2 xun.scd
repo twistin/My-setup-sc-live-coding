@@ -1,3 +1,14 @@
+// tempo
+t = p.clock.tempo_(90/60);
+
+t = TempoClock.default.tempo_(90/60); // Ajusta el tempo si es necesario
+
+////////
+("../Setup/Setup.scd").loadRelative;
+
+
+
+
 (
 {
 	arg hz=440,amp=0.5;

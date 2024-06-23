@@ -33,7 +33,7 @@ t = p.clock.tempo_(120/60);
 	\instrument, \bufseg1,
 	\bufnum, d["china"][2],
 	\startSec,0,// Pwhite(0, d["china"][1].duration * 0.6, inf),
-	\rate, 1,
+	\rate, Pxrand([1,0.6,5],inf),
 	\dur, 10,//Pexprand(0.2, 0.9, inf),
 	\legato, 1,
 	// 70% chance of being a rest
@@ -97,23 +97,24 @@ t = p.clock.tempo_(120/60);
 )
 ///////////////////////////////////////////////////////////
 
-~mix = {~a+~d+ ~b}
-
+~mix = {~a+~b + ~c+~d}
+~a+~d+ ~b
 /////////////////////////////////////////////////////////
 
 
-~a.quant_(1).fadeTime_(0).play
+~a.quant_(1).fadeTime_(0).play;
 ~a.stop
 ~a.resume
+
 ~a.pause
 
 ~a.clear
 
 
 
-~b.quant_(1).fadeTime_(0).play
+~b.quant_(1).fadeTime_(0).play;
 ~a.stop
-~a.resume
+~b.play
 ~a.pause
 
 

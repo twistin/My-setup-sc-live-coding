@@ -113,11 +113,11 @@ t = p.clock.tempo_(90/60);
 )
 ///////////////////////////////////////////////////////////
 
-~mix = {}
+~mix = {~a + ~b ~c+~d}
 
 /////////////////////////////////////////////////////////
 
-
+//hh
 ~a.quant_(1).fadeTime_(0).play;
 ~a.stop;
 ~a.resume;
@@ -125,34 +125,51 @@ t = p.clock.tempo_(90/60);
 
 ~a.clear;
 
-
+///snare
 
 ~b.quant_(1).fadeTime_(0).play
-~a.stop
-~a.resume
-~a.pause
+~b.stop
+~b.resume
+~b.pause
 
 
 
 // bass
 ~c.quant_(1).fadeTime_(0).play
-~a.stop
-~a.resume
-~a.pause
+~c.stop
+~c.resume
+~c.pause
 
 
 ~d.quant_(1).fadeTime_(0).play
 ~d.play
+~d.resume
 ~d.stop
 
 
 
 ~e.quant_(1).fadeTime_(0).play
-~e.play
+~e.pause
+~e.resume
 ~e.stop
 
 
 
+
+~on = Tdef(\on, {
+	~a.play;
+	4.wait;
+	~b.play;
+	4.wait;
+	~c.play;
+	4.wait;
+	~d.play;
+	4.wait;
+	~e.play;
+	2.wait
+
+
+});
 
 
 ~off = Tdef(\off, {
@@ -169,6 +186,9 @@ t = p.clock.tempo_(90/60);
 
 
 });
+
+
+
 
 ~off.play;
 
