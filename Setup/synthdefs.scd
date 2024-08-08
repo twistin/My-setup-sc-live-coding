@@ -1354,7 +1354,7 @@ SynthDef(\buffer, {
 	Out.ar(0, sig);
 }).add;
 
-
+// Jamshark synth
 SynthDef(\bufseg1, { |out, gate = 1, bufnum, startSec, rate = 1, amp = 1, pan = 0|
 	var sig = PlayBuf.ar(
 		1, bufnum,
@@ -1499,7 +1499,6 @@ SynthDef(\pad_ho, {
 	sig = sig!2;
 	Out.ar(\out.kr(0), sig);
 }).add;
-
 
 
 // apadMH

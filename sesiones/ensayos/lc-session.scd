@@ -23,38 +23,46 @@ s.options.sampleRate = 44100
 )
 
 (
+
 ~a =Pbind(
 	\type, \midi,
-	\dur, l,
+	\dur, 1/2,
 	\midicmd,\noteOn,
 	\midiout, m,
 	\midinote, Pxrand(Scale.minorPentatonic.degrees+50,inf)+Prand([0,12,24], inf),
-	\amp, 0.1,
+	\amp, 0.09,
 	\sustein, 0.02
 
 ).play(t,quant:4);
 )
 ~a.pause;
 ~a.resume;
-
+~a.stop
 s.options.sampleRate = 48000
 
 (
-
-	~b = Pbind(
+l = Prewrite(0.25,
+    (
+        0.25: #[0.25,0.25,0.25,0.5],
+        0.5: #[0.25,0.5,0.125,0.125,0.125,0.125],
+        0.125: #[0.375,0.125],
+        0.375: #[0.375,0.375,1],
+        1: #[0.75,0.25],
+        0.75: #[16]
+),60);
+	~kick[0] = Pbind(
 		\instrument, \kick808,
-
-		\dur, 2,
+		\dur, l,
 		\sus, 1,
-		\amp, 1/2
+		\amp, 0.4
 
-	).play(t,quant:2);
+	).play(t,quant:4);
 
 )
+~b.pause;
 
-
-
-
+~sn.plau
+~sn.pause
 
 (
 l = Prewrite(1, // start with 1
@@ -62,16 +70,20 @@ l = Prewrite(1, // start with 1
             0.25: [3,3,2]/4,
         3/4: [0.25,1,0.125,0.125],
         ), 4);
-	~c = Pbind(
+	~sn[0] = Pbind(
 		\instrument, \snare1,
 
-		\dur, 2.5,
+		\dur, l,
 		\sus, 1,
 		\amp, 1/2
 
-	).play(t,quant:2);
+	);
 
 )
+~sn.quant_(1).play;
+~sn[1] = \filter -> { |in| GVerb.ar(in, roomsize:100, maxroomsize:500)};
+
+~sn.set(\wet1, 0.2)
 
 ///////////////////////
 
@@ -113,7 +125,7 @@ p = ProxySpace(
 ~b.spawn;
 
 ~b.play; ~b.awake;
-~b = {\k.kr(0) + SinOscFB.ar(XLine.kr(\freq.kr(500)*[1, \mod.kr(0.98499)],\freq.kr * [1, \mod.kr], \d.kr(0.0005)),\fb.kr(0)).mean.tanh !2 * Env([0,1,1,0], [\atk.kr(0.005), \sus.kr(0),\rel.kr(0.3) + \d.kr]).kr(2) * \amp.kr(0.2) +(\k.kr * LPF.ar(BrownNoise.ar([0.3,0.31]),[5000,6500]) * Env.perc(0.02,\rel.kr * 0.9, \cur.kr(-5)).ar(0))}
+~b = {\k.kr(0) + SinOscFB.ar(XLine.kr(\freq.kr(500)*[1, \mod.kr(0.98499)],\freq.kr * [1, \mod.kr], \d.kr(0.0005)),\fb.kr(0)).mean.tanh !2 * Env([0,1,1,0], [\atk.kr(0.005), \sus.kr(0),\rel.kr(0.3) + \d.kr]).kr(2) * \amp.kr(0.2) +(\k.kr * LPF.ar(BrownNoise.ar([0.3,0.31]),[5000,6500]) * Env.perc(0.02,\rel.kr * 0.9, \cur.kr(-5)).ar(0))};
 
 
 ~c.play;~c.awake_(false);
@@ -165,6 +177,7 @@ p = ProxySpace(
 
 ~seq2.clear
 ~seq1.pause
+~seq2.pause
 
 
 
@@ -237,7 +250,7 @@ CmdPeriod.add({
 
 
 }).play;
-
+~seq.pause
 
 ~seq.stop
 
@@ -335,6 +348,7 @@ Pbindef(\p1,
 	\chan, 0,
 	\ctlNum, 20,
 	\control, Pseq((0..127).mirror, inf),
+	\amp,1
 
 ).quant_(4);
 )
